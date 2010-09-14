@@ -28,10 +28,14 @@ set modeline		" Turn modeline support on
 set matchpairs+=<:>	" Add bracket matching for angled brackets
 syntax on
 
-" Set up autobackup
+" Be paranoid, and automatically set up autobackup
+if (!isdirectory(expand("~/tmp/vim.backup")))
+    call mkdir(expand("~/tmp/vim.backup"), "p", 0755)
+endif
 set backupdir=~/tmp/vim.backup
 set backup
 set writebackup
+set backupext=.bak
 
 " Key bindings
 map g 1G
