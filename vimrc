@@ -59,10 +59,15 @@ autocmd BufNewFile,BufRead *.make set sts=0 noet ts=8 sw=8
 set hlsearch is ic scs
 map <CR> :nohlsearch<CR>
 
-" Set up cscope inntegration
-if has("cscope")
-    set csto=0
-    set nocsverb
+" Set up cscope integration
+function! CscopeInit()
+    if !has("cscope")
+	return
+    endif
+
+    set csto=0	    " Search cscope before tags.
+    set nocsverb    " Don't be verbose
+
     if filereadable("cscope.db") && filereadable("/usr/local/bin/cscope")
 	" We are expecting cscope.db, cscope.db.po, cscope.db.in
 	let s:cscopedb="cscope.db -q"
@@ -94,7 +99,9 @@ if has("cscope")
     " csi: Find files #including this
     map csi :cs find i <C-R>=expand("<cfile>")<CR><CR>
 
-endif
+endfunction
+
+call CscopeInit()
 
 " shift-q: Quilt shortcut
 map <S-Q> :!$HOME/bin/q<Space>
