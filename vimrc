@@ -49,18 +49,29 @@ autocmd BufNewFile,BufRead *.msg set tw=65
 autocmd BufNewFile,BufRead *[Mm]akefile* set sts=0 noet ts=8 sw=8
 autocmd BufNewFile,BufRead *.make set sts=0 noet ts=8 sw=8
 "
-" Highlight searches
-set hlsearch
+" Enable search-related options: highlight matches in a search
+" (hls), show the current matching pattern as you search (is),
+" ignore case (ic) unless you are searching for both upper and
+" lowercase letters (scs).
+set hlsearch is ic scs
 map <CR> :nohlsearch<CR>
 "
 " Set up cscope inntegration
 if has("cscope")
     set csto=0
     set nocsverb
-    if filereadable("GTAGS")
+    if filereadable("cscope.db") && filereadable("/usr/local/bin/cscope")
+	" We are expecting cscope.db, cscope.db.po, cscope.db.in
+	let s:cscopedb="cscope.db -q"
+	set cscopeprg=/usr/local/bin/cscope
+    elseif filereadable("GTAGS") && filereadable("/opt/local/bin/gtags-cscope")
 	set cscopeprg=/opt/local/bin/gtags-cscope
-	let cscopedb="GTAGS"
-	:execute ":cs add GTAGS"
+	let s:cscopedb="GTAGS"
+    endif
+
+    if exists("s:cscopedb")
+	:execute ":cs add " . s:cscopedb
+	unlet s:cscopedb
     endif
 
     " css: Find symbol
@@ -106,8 +117,16 @@ endif
 " desert is illegible in SnowLeopard Terminal :(
 if has("gui_running")
 "   set guifont=Consolas:h12.0
-    set guifont="Menlo Regular:h12.00"
+    set guifont=Menlo\ Regular:h12
+    set lines=60
     colorscheme desert
 else
     colorscheme default
+endif
+" Hide the GUI toolbar
+set guioptions-=T
+" Set up the fugitive plugin
+runtime plugin/fugitive.vim
+if exists("*fugitive#statusline")
+    set statusline=\ [%n]\ %{fugitive#statusline()}\ %f\ %m%r%=%l/%L\
 endif
