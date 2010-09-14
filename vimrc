@@ -22,6 +22,7 @@ set autoindent
 set showmatch
 set cindent
 set visualbell
+set title		" Set terminal windows title
 set laststatus=2	" Last window always gets a status line
 set statusline=\ [%n]\ %f\ %m%r%=%l/%L\
 set modeline		" Turn modeline support on
