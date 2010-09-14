@@ -12,28 +12,27 @@
 " See the License for the specific language governing permissions and
 " limitations under the License.
 
-" Useful settings
-set nocompatible
-set sts=4
-set sw=4
-set tw=79
+" Basic settings.
+set nocompatible	" Don't be vi compatible
+set softtabstop=4
+set shiftwidth=4
+set textwidth=79
 set smarttab
-syntax on
-set backupdir=~/tmp/vim.backup
 set autoindent
-set backup
-set writebackup
 set showmatch
 set cindent
 set visualbell
-set laststatus=2
+set laststatus=2	" Last window always gets a status line
 set statusline=\ [%n]\ %f\ %m%r%=%l/%L\
-" Turn modeline support on
-set modeline
-set modelines=2
-" Add bracket matching for angled brackets.
-set matchpairs+=<:>
-"
+set modeline		" Turn modeline support on
+set matchpairs+=<:>	" Add bracket matching for angled brackets
+syntax on
+
+" Set up autobackup
+set backupdir=~/tmp/vim.backup
+set backup
+set writebackup
+
 " Key bindings
 map g 1G
 map <C-A> :b#<CR>
@@ -45,7 +44,7 @@ map <C-P> :bp<CR>
 autocmd BufNewFile,BufRead *.log set tw=65
 autocmd BufNewFile,BufRead *.txt set tw=65
 autocmd BufNewFile,BufRead *.msg set tw=65
-" turn off funky tabbing modes for makefiles
+" Turn off funky tabbing modes for makefiles
 autocmd BufNewFile,BufRead *[Mm]akefile* set sts=0 noet ts=8 sw=8
 autocmd BufNewFile,BufRead *.make set sts=0 noet ts=8 sw=8
 "
@@ -55,7 +54,7 @@ autocmd BufNewFile,BufRead *.make set sts=0 noet ts=8 sw=8
 " lowercase letters (scs).
 set hlsearch is ic scs
 map <CR> :nohlsearch<CR>
-"
+
 " Set up cscope inntegration
 if has("cscope")
     set csto=0
@@ -92,14 +91,10 @@ if has("cscope")
     map csi :cs find i <C-R>=expand("<cfile>")<CR><CR>
 
 endif
-"
+
 " shift-q: Quilt shortcut
 map <S-Q> :!$HOME/bin/q<Space>
-"
-" Load a decent man page viewer
-runtime ftplugin/man.vim
-map K :Man <C-R>=expand("<cword>")<CR><CR>
-"
+
 " Highlight trailing whitespace.
 if has("syntax") && (&t_Co > 2 || has("gui_running"))
     syntax on
@@ -109,24 +104,27 @@ if has("syntax") && (&t_Co > 2 || has("gui_running"))
     endf
     autocmd BufNewFile,BufRead * call ActivateInvisibleCharIndicator()
 endif
+
 " Autostrip trailing whitespace on save.
 " too dangerous - screws me when making quilt patches
 " autocmd BufWritePre * :%s/\s\+$//e
-"
-"
-" desert is illegible in SnowLeopard Terminal :(
+
 if has("gui_running")
-"   set guifont=Consolas:h12.0
     set guifont=Menlo\ Regular:h12
     set lines=60
+    set guioptions-=T " Hide the GUI toolbar
     colorscheme desert
 else
+    " desert is illegible in SnowLeopard Terminal :(
     colorscheme default
 endif
-" Hide the GUI toolbar
-set guioptions-=T
+
 " Set up the fugitive plugin
 runtime plugin/fugitive.vim
 if exists("*fugitive#statusline")
     set statusline=\ [%n]\ %{fugitive#statusline()}\ %f\ %m%r%=%l/%L\
 endif
+
+" Load a decent man page viewer
+runtime ftplugin/man.vim
+map K :Man <C-R>=expand("<cword>")<CR><CR>
