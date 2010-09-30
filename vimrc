@@ -22,7 +22,6 @@ set autoindent
 set showmatch
 set cindent
 set visualbell
-set title		" Set terminal windows title
 set laststatus=2	" Last window always gets a status line
 set statusline=\ [%n]\ %f\ %m%r%=%l/%L\
 set modeline		" Turn modeline support on
@@ -59,6 +58,14 @@ autocmd BufNewFile,BufRead *.make set sts=0 noet ts=8 sw=8
 " lowercase letters (scs).
 set hlsearch is ic scs
 map <CR> :nohlsearch<CR>
+
+" Return the current terminal (tab) title
+function! TerminalTitle()
+    return system("osascript" .
+	\" -e 'tell application \"Terminal\"'" .
+	\" -e 'get the custom title of the selected tab of the front window'" .
+	\" -e 'end tell'")
+endfunction
 
 " Set up cscope integration
 function! CscopeInit()
@@ -140,3 +147,10 @@ endif
 " Load a decent man page viewer
 runtime ftplugin/man.vim
 map K :Man <C-R>=expand("<cword>")<CR><CR>
+
+" Before we set vim to update the terminal title, save the previous terminal
+" title so that we can restore it on exit. Otherwise you get a ridiculous
+" "thanks for flying with vim" title.
+let &titleold=TerminalTitle()
+set title
+
