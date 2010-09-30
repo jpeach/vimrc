@@ -38,7 +38,6 @@ set writebackup
 set backupext=.bak
 
 " Key bindings
-map g 1G
 map <C-A> :b#<CR>
 map <C-N> :bn<CR>
 map <C-P> :bp<CR>
