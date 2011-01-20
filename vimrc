@@ -78,15 +78,12 @@ function! CscopeInit()
     if filereadable("cscope.db") && filereadable("/usr/local/bin/cscope")
 	" We are expecting cscope.db, cscope.db.po, cscope.db.in
 	let s:cscopedb="cscope.db -q"
+	:execute ":cs add cscope.db . -q"
 	set cscopeprg=/usr/local/bin/cscope
     elseif filereadable("GTAGS") && filereadable("/opt/local/bin/gtags-cscope")
 	set cscopeprg=/opt/local/bin/gtags-cscope
 	let s:cscopedb="GTAGS"
-    endif
-
-    if exists("s:cscopedb")
-	:execute ":cs add " . s:cscopedb
-	unlet s:cscopedb
+	:execute ":cs add GTAGS"
     endif
 
     " css: Find symbol
