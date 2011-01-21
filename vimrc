@@ -75,15 +75,17 @@ function! CscopeInit()
     set csto=0	    " Search cscope before tags.
     set nocsverb    " Don't be verbose
 
-    if filereadable("cscope.db") && filereadable("/usr/local/bin/cscope")
-	" We are expecting cscope.db, cscope.db.po, cscope.db.in
-	let s:cscopedb="cscope.db -q"
-	:execute ":cs add cscope.db . -q"
-	set cscopeprg=/usr/local/bin/cscope
-    elseif filereadable("GTAGS") && filereadable("/opt/local/bin/gtags-cscope")
+    " For cscope, we are expecting cscope.db, cscope.db.po, cscope.db.in. For
+    " global, we are expecting GTAGS. We prefer global to cscope.
+
+    if filereadable("/opt/local/bin/gtags-cscope") && filereadable("GTAGS")
 	set cscopeprg=/opt/local/bin/gtags-cscope
-	let s:cscopedb="GTAGS"
 	:execute ":cs add GTAGS"
+    elseif filereadable("/usr/local/bin/cscope") && filereadable("cscope.db")
+	set cscopeprg=/usr/local/bin/cscope
+	:execute ":cs add cscope.db . -q"
+    elseif filereadable("/usr/bin/cscope") && filereadable("cscope.db")
+	:execute ":cs add cscope.db . -q"
     endif
 
     " css: Find symbol
