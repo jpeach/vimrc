@@ -25,6 +25,7 @@ set visualbell
 set laststatus=2	" Last window always gets a status line
 set statusline=\ [%n]\ %f\ %m%r%=%l/%L\
 set modeline		" Turn modeline support on
+set modelines=2
 set matchpairs+=<:>	" Add bracket matching for angled brackets
 syntax on
 
@@ -81,6 +82,9 @@ function! CscopeInit()
     if filereadable("/opt/local/bin/gtags-cscope") && filereadable("GTAGS")
 	set cscopeprg=/opt/local/bin/gtags-cscope
 	:execute ":cs add GTAGS"
+    elseif filereadable("/opt/local/bin/cscope") && filereadable("cscope.db")
+	set cscopeprg=/opt/local/bin/cscope
+	:execute ":cs add cscope.db . -q"
     elseif filereadable("/usr/local/bin/cscope") && filereadable("cscope.db")
 	set cscopeprg=/usr/local/bin/cscope
 	:execute ":cs add cscope.db . -q"
