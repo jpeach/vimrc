@@ -157,3 +157,7 @@ map K :Man <C-R>=expand("<cword>")<CR><CR>
 let &titleold=TerminalTitle()
 set title
 
+" Load .vimrc and .exrc files in the current working directory
+set exrc
+" But do it carefully
+set secure
