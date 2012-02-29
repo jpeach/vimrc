@@ -43,6 +43,10 @@ map <C-A> :b#<CR>
 map <C-N> :bn<CR>
 map <C-P> :bp<CR>
 "
+" Make regex special characters special by default (see :help pattern).
+noremap / /\v
+vnoremap / /\v
+"
 " special handling for different file types
 :filetype on
 autocmd BufNewFile,BufRead *.log set tw=65
