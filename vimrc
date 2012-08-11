@@ -140,10 +140,8 @@ if has("gui_running")
     set guifont=Menlo\ Regular:h12
     set lines=60
     set guioptions-=T " Hide the GUI toolbar
-    " colorscheme desert
-    colorscheme zenburn
+    colorscheme solarized
 else
-    " desert is illegible in SnowLeopard Terminal :(
     colorscheme default
 endif
 
