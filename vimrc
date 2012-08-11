@@ -47,8 +47,10 @@ map <C-P> :bp<CR>
 noremap / /\v
 vnoremap / /\v
 "
+call pathogen#infect()
+filetype plugin indent on
+"
 " special handling for different file types
-:filetype on
 autocmd BufNewFile,BufRead *.log set tw=65
 autocmd BufNewFile,BufRead *.txt set tw=65
 autocmd BufNewFile,BufRead *.msg set tw=65
