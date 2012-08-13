@@ -17,6 +17,7 @@ set nocompatible	" Don't be vi compatible
 set softtabstop=4
 set shiftwidth=4
 set textwidth=79
+set expandtab
 set smarttab
 set autoindent
 set showmatch
