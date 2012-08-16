@@ -142,6 +142,9 @@ if has("gui_running")
     set lines=60
     set guioptions-=T " Hide the GUI toolbar
     set background=dark
+    " Relative numbering only in GUI mode, since it doesn't draw right in
+    " some terminals.
+    set relativenumber
     colorscheme solarized
 else
     colorscheme default
