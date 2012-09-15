@@ -69,6 +69,9 @@ autocmd BufNewFile,BufRead *.make set sts=0 noet ts=8 sw=8
 set hlsearch is ic scs
 map <CR> :nohlsearch<CR>
 
+" Map <Leader>a to do an Ack search of the current word
+map <Leader>a :Ack <C-R>=expand("<cword>")<CR><CR>
+
 " Return the current terminal (tab) title
 function! TerminalTitle()
     return system("osascript" .
