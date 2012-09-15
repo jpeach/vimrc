@@ -106,21 +106,21 @@ function! CscopeInit()
     endif
 
     " css: Find symbol
-    map css :cs find s <C-R>=expand("<cword>")<CR><CR>
+    map <Leader>cs :cs find s <C-R>=expand("<cword>")<CR><CR>
     " csg: Find definition
-    map csg :cs find g <C-R>=expand("<cword>")<CR><CR>
+    map <Leader>cg :cs find g <C-R>=expand("<cword>")<CR><CR>
     " csc: Find callers
-    map csc :cs find c <C-R>=expand("<cword>")<CR><CR>
+    map <Leader>cc :cs find c <C-R>=expand("<cword>")<CR><CR>
     " csd: Find callees
-    map csd :cs find d <C-R>=expand("<cword>")<CR><CR>
+    map <Leader>cd :cs find d <C-R>=expand("<cword>")<CR><CR>
     " cst: Find text string
-    map cst :cs find t <C-R>=expand("<cword>")<CR><CR>
+    map <Leader>ct :cs find t <C-R>=expand("<cword>")<CR><CR>
     " cse: Find egrep pattern
-    map cse :cs find e <C-R>=expand("<cword>")<CR><CR>
+    map <Leader>ce :cs find e <C-R>=expand("<cword>")<CR><CR>
     " csf: Find file
-    map csf :cs find f <C-R>=expand("<cfile>")<CR><CR>
+    map <Leader>cf :cs find f <C-R>=expand("<cfile>")<CR><CR>
     " csi: Find files #including this
-    map csi :cs find i <C-R>=expand("<cfile>")<CR><CR>
+    map <Leader>ci :cs find i <C-R>=expand("<cfile>")<CR><CR>
 
 endfunction
 
