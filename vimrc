@@ -145,6 +145,8 @@ endif
 
 if has("gui_running")
     set guifont=Menlo\ Regular:h12
+    " Make the printfont small so we can get a more on the page (obviously)
+    set printfont=Menlo\ Regular:h6
     set lines=60
     set guioptions-=T " Hide the GUI toolbar
     set background=dark
