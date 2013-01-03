@@ -61,6 +61,9 @@ autocmd BufNewFile,BufRead *.msg set tw=65
 " Turn off funky tabbing modes for makefiles
 autocmd BufNewFile,BufRead *[Mm]akefile* set sts=0 noet ts=8 sw=8
 autocmd BufNewFile,BufRead *.make set sts=0 noet ts=8 sw=8
+" Map ,8 to the flake8 command in python mode
+autocmd FileType python map <buffer> <Leader>8 :call Flake8()<CR>
+
 "
 " Enable search-related options: highlight matches in a search
 " (hls), show the current matching pattern as you search (is),
