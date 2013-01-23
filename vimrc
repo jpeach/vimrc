@@ -1,4 +1,4 @@
-" Copyright 2010 James Peach
+" Copyright 2010-2013 James Peach
 "
 " Licensed under the Apache License, Version 2.0 (the "License");
 " you may not use this file except in compliance with the License.
@@ -74,6 +74,8 @@ map <CR> :nohlsearch<CR>
 
 " Map <Leader>a to do an Ack search of the current word
 map <Leader>a :Ack <C-R>=expand("<cword>")<CR><CR>
+" Map ,s to git-stripspace the current buffer
+map <Leader>s :%!git stripspace<CR>
 
 " Return the current terminal (tab) title
 function! TerminalTitle()
