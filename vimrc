@@ -100,6 +100,9 @@ function! CscopeInit()
     if filereadable("/opt/local/bin/gtags-cscope") && filereadable("GTAGS")
 	set cscopeprg=/opt/local/bin/gtags-cscope
 	:execute ":cs add GTAGS"
+    elseif filereadable("/usr/local/bin/gtags-cscope") && filereadable("GTAGS")
+	set cscopeprg=/usr/local/bin/gtags-cscope
+	:execute ":cs add GTAGS"
     elseif filereadable("/opt/local/bin/cscope") && filereadable("cscope.db")
 	set cscopeprg=/opt/local/bin/cscope
 	:execute ":cs add cscope.db . -q"
@@ -149,7 +152,7 @@ endif
 " autocmd BufWritePre * :%s/\s\+$//e
 
 if has("gui_running")
-    set guifont=Menlo\ Regular:h12
+    set guifont=Menlo\ Regular:h10
     " Make the printfont small so we can get a more on the page (obviously)
     set printfont=Menlo\ Regular:h6
     set lines=60
