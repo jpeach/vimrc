@@ -24,7 +24,7 @@ set showmatch
 set cindent
 set visualbell
 set laststatus=2	" Last window always gets a status line
-set statusline=\ [%n]\ %f\ %m%r%=%l/%L\
+set statusline=\ [%n]\ %f\ %m%r%=%l/%L
 set modeline		" Turn modeline support on
 set modelines=2
 set matchpairs+=<:>	" Add bracket matching for angled brackets
