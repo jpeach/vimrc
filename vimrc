@@ -182,6 +182,13 @@ map K :Man <C-R>=expand("<cword>")<CR><CR>
 let &titleold=TerminalTitle()
 set title
 
+augroup Tmux "{{{2
+    au!
+
+    autocmd VimEnter,BufNewFile,BufReadPost * call system('tmux rename-window "vim - ' . split(substitute(getcwd(), $HOME, '~', ''), '/')[-1] . '"')
+    autocmd VimLeave * call system('tmux rename-window ' . split(substitute(getcwd(), $HOME, '~', ''), '/')[-1])
+augroup END
+
 " Load .vimrc and .exrc files in the current working directory
 set exrc
 " But do it carefully

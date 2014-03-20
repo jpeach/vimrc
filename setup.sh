@@ -19,6 +19,15 @@ error()
     exit 1
 }
 
+linkit()
+{
+    # -s symbolic
+    # -h don't follow target symlinks
+    # -f overwrite target
+    # -v verbose
+    ln -shfv $1 $2
+}
+
 HOMEDIR=$(cd ~ && pwd)
 VIMRC=$(cd $(dirname $0) && pwd)
 
@@ -33,9 +42,7 @@ VIMRC=${VIMRC##$HOMEDIR/}
     [[ -d "$VIMRC" ]] || VIMRC="/${VIMRC}"
     [[ -d "$VIMRC" ]] || error "can't find $VIMRC"
 
-    echo "linking ~/.vimrc -> $VIMRC/vimrc"
-    ln -sf $VIMRC/vimrc .vimrc
-
-    echo "linking ~/.vim -> $VIMRC"
-    ln -sf $VIMRC .vim
+    linkit $VIMRC/tmux.conf ~/.tmux.conf
+    linkit $VIMRC/vimrc ~/.vimrc
+    linkit $VIMRC ~/.vim
 )
