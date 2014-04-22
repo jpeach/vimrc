@@ -77,6 +77,12 @@ map <Leader>a :Ack <C-R>=expand("<cword>")<CR><CR>
 " Map ,s to git-stripspace the current buffer
 map <Leader>s :%!git stripspace<CR>
 
+" CtrlP - fuzzy file finder; http://kien.github.io/ctrlp.vim/
+" Map ,t to Most Recently Used file find
+map <Leader>t :CtrlPMRU<CR>
+" Map ,b to buffer find
+map <Leader>b :CtrlPBuffer<CR>
+
 " Return the current terminal (tab) title
 function! TerminalTitle()
     return system("osascript" .
