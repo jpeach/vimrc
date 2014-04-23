@@ -33,6 +33,9 @@ syntax on
 " Set , as <Leader>
 let mapleader=","
 
+" Don't let the CtrlP plugin map <C-P>
+let g:ctrlp_map=''
+
 " Be paranoid, and automatically set up autobackup
 if (!isdirectory(expand("~/tmp/vim.backup")))
     call mkdir(expand("~/tmp/vim.backup"), "p", 0755)
