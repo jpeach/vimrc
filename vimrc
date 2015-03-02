@@ -54,7 +54,7 @@ map <C-P> :bp<CR>
 noremap / /\v
 vnoremap / /\v
 "
-call pathogen#infect()
+execute pathogen#infect()
 filetype plugin indent on
 "
 " special handling for different file types
