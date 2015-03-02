@@ -82,7 +82,7 @@ map <Leader>s :%!git stripspace<CR>
 
 " CtrlP - fuzzy file finder; http://kien.github.io/ctrlp.vim/
 " Map ,t to Most Recently Used file find
-map <Leader>t :CtrlPMRU<CR>
+map <Leader>t :CtrlP<CR>
 " Map ,b to buffer find
 map <Leader>b :CtrlPBuffer<CR>
 
@@ -190,8 +190,8 @@ map K :Man <C-R>=expand("<cword>")<CR><CR>
 " Before we set vim to update the terminal title, save the previous terminal
 " title so that we can restore it on exit. Otherwise you get a ridiculous
 " "thanks for flying with vim" title.
-let &titleold=TerminalTitle()
-set title
+" let &titleold=TerminalTitle()
+" set title
 
 augroup Tmux "{{{2
     au!
