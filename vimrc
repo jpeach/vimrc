@@ -143,9 +143,6 @@ endfunction
 
 call CscopeInit()
 
-" shift-q: Quilt shortcut
-map <S-Q> :!$HOME/bin/q<Space>
-
 " Highlight trailing whitespace.
 if has("syntax") && (&t_Co > 2 || has("gui_running"))
     syntax on
