@@ -21,7 +21,6 @@ set expandtab
 set smarttab
 set autoindent
 set showmatch
-set cindent
 set visualbell
 set laststatus=2	" Last window always gets a status line
 set statusline=\ [%n]\ %f\ %m%r%=%l/%L
@@ -66,6 +65,12 @@ autocmd BufNewFile,BufRead *[Mm]akefile* set sts=0 noet ts=8 sw=8
 autocmd BufNewFile,BufRead *.make set sts=0 noet ts=8 sw=8
 " Map ,8 to the flake8 command in python mode
 autocmd FileType python map <buffer> <Leader>8 :call Flake8()<CR>
+
+" Turn on C indentation.
+set cindent
+" Indentation options:
+" :0  (cino-:) Turn off indentation of case labels in switches.
+set cinoptions=:0
 
 "
 " Enable search-related options: highlight matches in a search
