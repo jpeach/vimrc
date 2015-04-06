@@ -35,6 +35,9 @@ let mapleader=","
 " Don't let the CtrlP plugin map <C-P>
 let g:ctrlp_map=''
 
+let g:alternateExtensions_hpp = "cpp,cc,c"
+let g:alternateExtensions_cc = "hpp,h"
+
 " Be paranoid, and automatically set up autobackup
 if (!isdirectory(expand("~/tmp/vim.backup")))
     call mkdir(expand("~/tmp/vim.backup"), "p", 0755)
