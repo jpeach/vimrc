@@ -27,6 +27,17 @@ set statusline=\ [%n]\ %f\ %m%r%=%l/%L
 set modeline		" Turn modeline support on
 set modelines=2
 set matchpairs+=<:>	" Add bracket matching for angled brackets
+
+" Highlight the line the cursor is on, but only in GUI mode otherwise it is
+" underlined in an really ugly way.
+if (has("gui_running"))
+    set cursorline
+endif
+
+" Make sure ruler is off so that Ctrl-G shows the column.
+set noruler
+
+" Obviously we want syntax highlighting :)
 syntax on
 
 " Set , as <Leader>
