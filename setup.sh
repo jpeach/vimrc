@@ -21,11 +21,23 @@ error()
 
 linkit()
 {
-    # -s symbolic
-    # -h don't follow target symlinks
-    # -f overwrite target
-    # -v verbose
-    ln -shfv $1 $2
+    case $(uname -s) in
+    Darwin)
+        # -s symbolic
+        # -h don't follow target symlinks
+        # -f overwrite target
+        # -v verbose
+        ln -shfv $1 $2
+        ;;
+    Linux)
+        # -n treat LINK_NAME  as a normal file if it
+        #    is a symbolic link to a directory
+        ln -snfv $1 $2
+        ;;
+    *)
+        ln -sfv $1 $2
+        ;;
+    esac
 }
 
 HOMEDIR=$(cd ~ && pwd)
