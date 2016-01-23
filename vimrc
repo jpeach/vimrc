@@ -68,6 +68,7 @@ noremap / /\v
 vnoremap / /\v
 "
 execute pathogen#infect()
+execute pathogen#helptags()
 filetype plugin indent on
 "
 " special handling for different file types
