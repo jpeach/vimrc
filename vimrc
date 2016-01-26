@@ -221,3 +221,6 @@ augroup END
 set exrc
 " But do it carefully
 set secure
+
+" Use goimports to format imports idiomatically.
+let g:go_fmt_command = "goimports"
