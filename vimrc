@@ -224,3 +224,6 @@ set secure
 
 " Use goimports to format imports idiomatically.
 let g:go_fmt_command = "goimports"
+
+" Autoformat rust code on save.
+let g:rustfmt_autosave = 1
