@@ -1,0 +1,23 @@
+#! /usr/bin/env bash
+
+# tmux-cc: Set up iTerm2 tmux integration.
+#
+# Usage:
+#
+# ssh target-host -A -t ./bin/tmux-cc
+# ... now iTerm2 will attach or reattach to the tmux session.
+
+AGENT=~/.ssh/.ssh-agent
+TMUX=/usr/bin/tmux
+
+# Stash the ssh-agent auth socket to that agent forwarding works.
+rm -f $AGENT
+ln -s $SSH_AUTH_SOCK $AGENT
+export SSH_AUTH_SOCK="$AGENT"
+
+$TMUX has-session > /dev/null 2>&1
+if [ 0 -eq $? ]; then
+    exec $TMUX -CC attach
+else
+    exec $TMUX -CC
+fi
