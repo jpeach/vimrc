@@ -54,7 +54,7 @@ VIMRC=${VIMRC##$HOMEDIR/}
     [[ -d "$VIMRC" ]] || VIMRC="/${VIMRC}"
     [[ -d "$VIMRC" ]] || error "can't find $VIMRC"
     [[ -d ~/.vim ]] && mv ~/.vim ~/.vim.old
-    [[ -d ~/bin]] && mkdir ~/bin
+    [[ -d ~/bin ]] && mkdir ~/bin
 
     linkit $VIMRC/tmux.conf ~/.tmux.conf
     linkit $VIMRC/vimrc ~/.vimrc
