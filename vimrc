@@ -1,4 +1,4 @@
-" Copyright 2010-2013 James Peach
+" Copyright 2010-2016 James Peach
 "
 " Licensed under the Apache License, Version 2.0 (the "License");
 " you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
 " limitations under the License.
 
 " Basic settings.
-set nocompatible	" Don't be vi compatible
+set nocompatible  " Don't be vi compatible
 set softtabstop=4
 set shiftwidth=4
 set textwidth=79
@@ -22,11 +22,11 @@ set smarttab
 set autoindent
 set showmatch
 set visualbell
-set laststatus=2	" Last window always gets a status line
+set laststatus=2  " Last window always gets a status line
 set statusline=\ [%n]\ %f\ %m%r%=%l/%L
-set modeline		" Turn modeline support on
+set modeline    " Turn modeline support on
 set modelines=2
-set matchpairs+=<:>	" Add bracket matching for angled brackets
+set matchpairs+=<:> " Add bracket matching for angled brackets
 
 " Highlight the line the cursor is on, but only in GUI mode otherwise it is
 " underlined in an really ugly way.
@@ -109,38 +109,30 @@ map <Leader>b :CtrlPBuffer<CR>
 " Return the current terminal (tab) title
 function! TerminalTitle()
     return system("osascript" .
-	\" -e 'tell application \"Terminal\"'" .
-	\" -e 'get the custom title of the selected tab of the front window'" .
-	\" -e 'end tell'")
+  \" -e 'tell application \"Terminal\"'" .
+  \" -e 'get the custom title of the selected tab of the front window'" .
+  \" -e 'end tell'")
 endfunction
 
-" Set up cscope integration
+" Set up gtags (cscope) integration
 function! CscopeInit()
     if !has("cscope")
-	return
+      return
     endif
 
-    set csto=0	    " Search cscope before tags.
+    set csto=0      " Search cscope before tags.
     set nocsverb    " Don't be verbose
 
-    " For cscope, we are expecting cscope.db, cscope.db.po, cscope.db.in. For
-    " global, we are expecting GTAGS. We prefer global to cscope.
+    let found = 0
 
-    if filereadable("/opt/local/bin/gtags-cscope") && filereadable("GTAGS")
-	set cscopeprg=/opt/local/bin/gtags-cscope
-	:execute ":cs add GTAGS"
-    elseif filereadable("/usr/local/bin/gtags-cscope") && filereadable("GTAGS")
-	set cscopeprg=/usr/local/bin/gtags-cscope
-	:execute ":cs add GTAGS"
-    elseif filereadable("/opt/local/bin/cscope") && filereadable("cscope.db")
-	set cscopeprg=/opt/local/bin/cscope
-	:execute ":cs add cscope.db . -q"
-    elseif filereadable("/usr/local/bin/cscope") && filereadable("cscope.db")
-	set cscopeprg=/usr/local/bin/cscope
-	:execute ":cs add cscope.db . -q"
-    elseif filereadable("/usr/bin/cscope") && filereadable("cscope.db")
-	:execute ":cs add cscope.db . -q"
-    endif
+    for d in [ '/opt/local/bin', '/usr/local/bin', '/usr/bin' ]
+        let gs = d . "/gtags-cscope"
+        if filereadable(gs) && filereadable("GTAGS")
+            execute ":set cscopeprg=" . gs
+            execute ":cs add GTAGS"
+            break
+        endif
+    endfor
 
     " css: Find symbol
     map <Leader>cs :cs find s <C-R>=expand("<cword>")<CR><CR>
@@ -167,8 +159,8 @@ call CscopeInit()
 if has("syntax") && (&t_Co > 2 || has("gui_running"))
     syntax on
     function! ActivateInvisibleCharIndicator()
-	syntax match TrailingSpace "[ \t]\+$" display containedin=ALL
-	highlight TrailingSpace ctermbg=Red
+        syntax match TrailingSpace "[ \t]\+$" display containedin=ALL
+        highlight TrailingSpace ctermbg=Red
     endf
     autocmd BufNewFile,BufRead * call ActivateInvisibleCharIndicator()
 endif
