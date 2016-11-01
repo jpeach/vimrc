@@ -9,7 +9,7 @@
 
 SSHDIR=$(cd ~ && pwd)/.ssh
 AGENT=$SSHDIR/.ssh-agent
-TMUX=${TMUX:-/usr/bin/tmux}
+TMUX_PROG=${TMUX_PROG:-/usr/bin/tmux}
 
 if [ ! -d "$SSHDIR" ]; then
     mkdir -p "$SSHDIR"
@@ -21,9 +21,9 @@ rm -f $AGENT
 ln -s $SSH_AUTH_SOCK $AGENT
 export SSH_AUTH_SOCK="$AGENT"
 
-$TMUX has-session > /dev/null 2>&1
+$TMUX_PROG has-session > /dev/null 2>&1
 if [ 0 -eq $? ]; then
-    exec $TMUX -CC attach
+    exec $TMUX_PROG -CC attach
 else
-    exec $TMUX -CC
+    exec $TMUX_PROG -CC
 fi
