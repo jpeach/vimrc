@@ -7,8 +7,14 @@
 # ssh target-host -A -t ./bin/tmux-cc
 # ... now iTerm2 will attach or reattach to the tmux session.
 
-AGENT=~/.ssh/.ssh-agent
+SSHDIR=$(cd ~ && pwd)/.ssh
+AGENT=$SSHDIR/.ssh-agent
 TMUX=${TMUX:-/usr/bin/tmux}
+
+if [ ! -d "$SSHDIR" ]; then
+    mkdir -p "$SSHDIR"
+    chmod 700 "$SSHDIR"
+fi
 
 # Stash the ssh-agent auth socket to that agent forwarding works.
 rm -f $AGENT
