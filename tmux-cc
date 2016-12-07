@@ -8,7 +8,7 @@
 # ... now iTerm2 will attach or reattach to the tmux session.
 
 SSHDIR=$(cd ~ && pwd)/.ssh
-AGENT=$SSHDIR/.ssh-agent
+AGENT=$SSHDIR/ssh-agent
 TMUX_PROG=${TMUX_PROG:-/usr/bin/tmux}
 
 if [ ! -d "$SSHDIR" ]; then
@@ -21,8 +21,7 @@ rm -f $AGENT
 ln -s $SSH_AUTH_SOCK $AGENT
 export SSH_AUTH_SOCK="$AGENT"
 
-$TMUX_PROG has-session > /dev/null 2>&1
-if [ 0 -eq $? ]; then
+if $TMUX_PROG has-session ; then
     exec $TMUX_PROG -CC attach
 else
     exec $TMUX_PROG -CC
