@@ -1,0 +1,30 @@
+#! /usr/bin/env bash
+
+set -e # exit on error
+
+sudo dnf install -y cmake llvm-devel clang-devel
+
+WORK=$(mktemp -d)
+PREFIX=$HOME/inst/rtags
+
+cd $WORK
+
+git clone https://gitlab.com/mikolajp/rtags.git rtags
+cd rtags
+git submodule update --init --recursive
+
+cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_EXPORT_COMPILE_COMMANDS=1 \
+    -DCMAKE_INSTALL_PREFIX=$HOME/inst/rtags \
+    .
+
+make
+rm -rf $PREFIX && make install
+
+for prg in $(find $PREFIX/bin -type f) ; do
+    ln -sf $prg $HOME/bin/$(basename $prg)
+done
+
+cd /
+rm -rf $WORK
