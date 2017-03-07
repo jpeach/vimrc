@@ -217,5 +217,14 @@ set secure
 " Use goimports to format imports idiomatically.
 let g:go_fmt_command = "goimports"
 
+" Enable more syntac highlights.
+let g:go_highlight_types = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+
+" Run vet, lint, etc on save. This picks up a reasonable amount of issues.
+let g:go_metalinter_autosave = 1
+
+
 " Autoformat rust code on save.
 let g:rustfmt_autosave = 1
