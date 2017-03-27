@@ -22,7 +22,7 @@ ln -s $SSH_AUTH_SOCK $AGENT
 export SSH_AUTH_SOCK="$AGENT"
 
 if $TMUX_PROG has-session ; then
-    exec $TMUX_PROG -CC attach
+    exec $TMUX_PROG -u -CC attach
 else
-    exec $TMUX_PROG -CC
+    exec $TMUX_PROG -u -CC
 fi
