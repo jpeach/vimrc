@@ -12,6 +12,11 @@
 " See the License for the specific language governing permissions and
 " limitations under the License.
 
+" Run pathogen first to load plugins. This ensures that anything we
+" set here overrides whatever the plugins do.
+execute pathogen#infect()
+execute pathogen#helptags()
+
 " Basic settings.
 set nocompatible  " Don't be vi compatible
 set softtabstop=4
@@ -66,9 +71,7 @@ map <C-P> :bp<CR>
 " Make regex special characters special by default (see :help pattern).
 noremap / /\v
 vnoremap / /\v
-"
-execute pathogen#infect()
-execute pathogen#helptags()
+
 filetype plugin indent on
 "
 " special handling for different file types
