@@ -12,10 +12,12 @@
 " See the License for the specific language governing permissions and
 " limitations under the License.
 
-" Run pathogen first to load plugins. This ensures that anything we
-" set here overrides whatever the plugins do.
 execute pathogen#infect()
 execute pathogen#helptags()
+
+" Force the sensible plugin to run now so that we can override what it
+" does if we want.
+runtime! plugin/sensible.vim
 
 " Basic settings.
 set nocompatible  " Don't be vi compatible
@@ -33,14 +35,14 @@ set modeline    " Turn modeline support on
 set modelines=2
 set matchpairs+=<:> " Add bracket matching for angled brackets
 
+" Make sure ruler is off so that Ctrl-G shows the column.
+set noruler
+
 " Highlight the line the cursor is on, but only in GUI mode otherwise it is
 " underlined in an really ugly way.
 if (has("gui_running"))
     set cursorline
 endif
-
-" Make sure ruler is off so that Ctrl-G shows the column.
-set noruler
 
 " Obviously we want syntax highlighting :)
 syntax on
@@ -73,7 +75,8 @@ noremap / /\v
 vnoremap / /\v
 
 filetype plugin indent on
-"
+
+
 " special handling for different file types
 autocmd BufNewFile,BufRead *.log set tw=65
 autocmd BufNewFile,BufRead *.txt set tw=65
@@ -227,7 +230,6 @@ let g:go_highlight_methods = 1
 
 " Run vet, lint, etc on save. This picks up a reasonable amount of issues.
 let g:go_metalinter_autosave = 1
-
 
 " Autoformat rust code on save.
 let g:rustfmt_autosave = 1
