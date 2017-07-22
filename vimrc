@@ -176,7 +176,7 @@ endif
 " autocmd BufWritePre * :%s/\s\+$//e
 
 if has("gui_running")
-    set guifont=Menlo\ Regular:h12
+    set guifont=Menlo\ Regular:h10
     " Make the printfont small so we can get a more on the page (obviously)
     set printfont=Menlo\ Regular:h6
     set lines=60
