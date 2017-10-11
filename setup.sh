@@ -62,4 +62,13 @@ VIMRC=${VIMRC##$HOMEDIR/}
 
     # Make this an absolute symlink.
     linkit $(pwd)/$VIMRC/tmux-cc ~/bin/tmux-cc
+
+    # Don't update Vagrantfile if it is a regular file, since I
+    # probably should verify that I don't want it and/or clean up
+    # and VMs.
+    if [ ! -f ~/Vagrantfile ] ; then
+        linkit Vagrantfile ~/Vagrantfile
+    else
+        echo Skipping Vagrantfile update ...
+    fi
 )
