@@ -105,6 +105,8 @@ map <CR> :nohlsearch<CR>
 map <Leader>a :Ack <C-R>=expand("<cword>")<CR><CR>
 " Map ,s to git-stripspace the current buffer
 map <Leader>s :%!git stripspace<CR>
+" Map ,j to use jq to format the current buffer
+map <Leader>j :%!jq .<CR>
 
 " CtrlP - fuzzy file finder; http://kien.github.io/ctrlp.vim/
 " Map ,t to Most Recently Used file find
