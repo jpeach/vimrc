@@ -67,7 +67,7 @@ VIMRC=${VIMRC##$HOMEDIR/}
     # probably should verify that I don't want it and/or clean up
     # and VMs.
     if [ ! -f ~/Vagrantfile ] ; then
-        linkit Vagrantfile ~/Vagrantfile
+        linkit $VIMRC/Vagrantfile ~/Vagrantfile
     else
         echo Skipping Vagrantfile update ...
     fi
