@@ -1,0 +1,33 @@
+#! /usr/bin/env bash
+
+set -e # exit on error
+
+if command -v brew ; then
+    brew install libxml2
+    brew link --force libxml2
+fi
+
+if command -v dnf ; then
+    sudo dnf install -y libxml2-devel
+fi
+
+WORK=$(mktemp -d)
+PREFIX=$HOME/inst/ctags
+
+cd $WORK
+
+git clone --depth=1 https://github.com/universal-ctags/ctags.git ctags
+cd ctags
+
+./autogen.sh
+./configure --prefix=$PREFIX
+
+make
+rm -rf $PREFIX && make install
+
+for prg in $(find $PREFIX/bin -type f) ; do
+    ln -sf $prg $HOME/bin/$(basename $prg)
+done
+
+cd /
+rm -rf $WORK
