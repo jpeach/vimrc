@@ -114,6 +114,13 @@ map <Leader>t :CtrlP<CR>
 " Map ,b to buffer find
 map <Leader>b :CtrlPBuffer<CR>
 
+" Map ,T to toggle the tagbar plugin.
+map <Leader>T :TagbarToggle<CR>
+
+if filereadable($HOME . '/bin/ctags')
+    let g:tagbar_ctags_bin = $HOME . '/bin/ctags'
+endif
+
 " Return the current terminal (tab) title
 function! TerminalTitle()
     return system("osascript" .
