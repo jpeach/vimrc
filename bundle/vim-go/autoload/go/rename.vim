@@ -41,6 +41,12 @@ function! go#rename#Rename(bang, ...) abort
 
   let cmd = [bin_path, "-offset", offset, "-to", to_identifier]
 
+  " check for any tags
+  if exists('g:go_build_tags')
+    let tags = get(g:, 'go_build_tags')
+    call extend(cmd, ["-tags", tags])
+  endif
+
   if go#util#has_job()
     call go#util#EchoProgress(printf("renaming to '%s' ...", to_identifier))
     call s:rename_job({
@@ -65,28 +71,25 @@ function s:rename_job(args)
 
   let status_dir =  expand('%:p:h')
 
-  function! s:close_cb(chan) closure
-    let l:job = ch_getjob(a:chan)
-    let l:info = job_info(l:job)
-
+  function! s:exit_cb(job, exitval) closure
     let status = {
           \ 'desc': 'last status',
           \ 'type': "gorename",
           \ 'state': "finished",
           \ }
 
-    if l:info.exitval
+    if a:exitval
       let status.state = "failed"
     endif
 
     call go#statusline#Update(status_dir, status)
 
-    call s:parse_errors(l:info.exitval, a:args.bang, messages)
+    call s:parse_errors(a:exitval, a:args.bang, messages)
   endfunction
 
   let start_options = {
         \ 'callback': funcref("s:callback"),
-        \ 'close_cb': funcref("s:close_cb"),
+        \ 'exit_cb': funcref("s:exit_cb"),
         \ }
 
   " modify GOPATH if needed
@@ -114,7 +117,7 @@ function s:parse_errors(exit_val, bang, out)
   silent! checktime
   let &autoread = current_autoread
 
-  let l:listtype = "quickfix"
+  let l:listtype = go#list#Type("GoRename")
   if a:exit_val != 0
     call go#util#EchoError("FAILED")
     let errors = go#tool#ParseErrors(a:out)
@@ -124,7 +127,7 @@ function s:parse_errors(exit_val, bang, out)
       call go#list#JumpToFirst(l:listtype)
     elseif empty(errors)
       " failed to parse errors, output the original content
-      call go#util#EchoError(join(a:out, ""))
+      call go#util#EchoError(a:out)
     endif
 
     return
