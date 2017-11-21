@@ -127,14 +127,6 @@ if winwidth(0) > 80
     let g:tagbar_width = 60
 endif
 
-" Return the current terminal (tab) title
-function! TerminalTitle()
-    return system("osascript" .
-  \" -e 'tell application \"Terminal\"'" .
-  \" -e 'get the custom title of the selected tab of the front window'" .
-  \" -e 'end tell'")
-endfunction
-
 " Set up gtags (cscope) integration
 function! CscopeInit()
     if !has("cscope")
@@ -216,12 +208,6 @@ endif
 " Load a decent man page viewer
 runtime ftplugin/man.vim
 map K :Man <C-R>=expand("<cword>")<CR><CR>
-
-" Before we set vim to update the terminal title, save the previous terminal
-" title so that we can restore it on exit. Otherwise you get a ridiculous
-" "thanks for flying with vim" title.
-" let &titleold=TerminalTitle()
-" set title
 
 augroup Tmux "{{{2
     au!
