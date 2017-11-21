@@ -121,6 +121,12 @@ if filereadable($HOME . '/bin/ctags')
     let g:tagbar_ctags_bin = $HOME . '/bin/ctags'
 endif
 
+" 60 is a more readable width than 40, especially if the
+" terminal is fullscreen.
+if winwidth(0) > 80
+    let g:tagbar_width = 60
+endif
+
 " Return the current terminal (tab) title
 function! TerminalTitle()
     return system("osascript" .
