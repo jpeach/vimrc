@@ -9,16 +9,12 @@ if !exists("g:go_fmt_command")
   let g:go_fmt_command = "gofmt"
 endif
 
-if !exists("g:go_goimports_bin")
-  let g:go_goimports_bin = "goimports"
+if !exists('g:go_fmt_options')
+  let g:go_fmt_options = ''
 endif
 
 if !exists('g:go_fmt_fail_silently')
   let g:go_fmt_fail_silently = 0
-endif
-
-if !exists('g:go_fmt_options')
-  let g:go_fmt_options = ''
 endif
 
 if !exists("g:go_fmt_experimental")
@@ -63,21 +59,24 @@ function! go#fmt#Format(withGoimport) abort
 
   " Write current unsaved buffer to a temp file
   let l:tmpname = tempname()
-  call writefile(getline(1, '$'), l:tmpname)
+  call writefile(go#util#GetLines(), l:tmpname)
   if go#util#IsWin()
     let l:tmpname = tr(l:tmpname, '\', '/')
   endif
 
   let bin_name = g:go_fmt_command
   if a:withGoimport == 1
-    let bin_name = g:go_goimports_bin
+    let bin_name = "goimports"
   endif
 
+  let current_col = col('.')
   let out = go#fmt#run(bin_name, l:tmpname, expand('%'))
+  let diff_offset = len(readfile(l:tmpname)) - line('$')
+
   if go#util#ShellError() == 0
     call go#fmt#update_file(l:tmpname, expand('%'))
   elseif g:go_fmt_fail_silently == 0
-    let errors = s:parse_errors(out)
+    let errors = s:parse_errors(expand('%'), out)
     call s:show_errors(errors)
   endif
 
@@ -99,10 +98,13 @@ function! go#fmt#Format(withGoimport) abort
     " Restore our cursor/windows positions.
     call winrestview(l:curw)
   endif
+
+  " be smart and jump to the line the new statement was added/removed
+  call cursor(line('.') + diff_offset, current_col)
 endfunction
 
 " update_file updates the target file with the given formatted source
-function! go#fmt#update_file(source, target) 
+function! go#fmt#update_file(source, target)
   " remove undo point caused via BufWritePre
   try | silent undojoin | catch | endtry
 
@@ -120,22 +122,42 @@ function! go#fmt#update_file(source, target)
   endif
 
   " reload buffer to reflect latest changes
-  silent! edit!
+  silent edit!
 
   let &fileformat = old_fileformat
   let &syntax = &syntax
 
-  " clean up previous location list
-  let l:listtype = "locationlist"
-  call go#list#Clean(l:listtype)
-  call go#list#Window(l:listtype)
+  let l:listtype = go#list#Type("GoFmt")
+
+  " the title information was introduced with 7.4-2200
+  " https://github.com/vim/vim/commit/d823fa910cca43fec3c31c030ee908a14c272640
+  if has('patch-7.4-2200')
+    " clean up previous list
+    if l:listtype == "quickfix"
+      let l:list_title = getqflist({'title': 1})
+    else
+      let l:list_title = getloclist(0, {'title': 1})
+    endif
+  else
+    " can't check the title, so assume that the list was for go fmt.
+    let l:list_title = {'title': 'Format'}
+  endif
+
+  if has_key(l:list_title, "title") && l:list_title['title'] == "Format"
+    call go#list#Clean(l:listtype)
+    call go#list#Window(l:listtype)
+  endif
 endfunction
 
 " run runs the gofmt/goimport command for the given source file and returns
 " the the output of the executed command. Target is the real file to be
-" formated. 
-function! go#fmt#run(bin_name, source, target) 
+" formated.
+function! go#fmt#run(bin_name, source, target)
   let cmd = s:fmt_cmd(a:bin_name, a:source, a:target)
+  if empty(cmd)
+    return
+  endif
+
   if cmd[0] == "goimports"
     " change GOPATH too, so goimports can pick up the correct library
     let old_gopath = $GOPATH
@@ -162,16 +184,24 @@ function! s:fmt_cmd(bin_name, source, target)
   " if not the user get's a warning via go#path#CheckBinPath()
   let bin_path = go#path#CheckBinPath(a:bin_name)
   if empty(bin_path)
-    return
+    return []
   endif
 
   " start constructing the command
+  let bin_path = go#util#Shellescape(bin_path)
   let cmd = [bin_path]
   call add(cmd, "-w")
 
-  if a:bin_name != "goimports"
-    call extend(cmd, split(g:go_fmt_options, " "))
-  else
+  " add the options for binary (if any). go_fmt_options was by default of type
+  " string, however to allow customization it's now a dictionary of binary
+  " name mapping to options.
+  let opts = g:go_fmt_options
+  if type(g:go_fmt_options) == type({})
+    let opts = has_key(g:go_fmt_options, a:bin_name) ? g:go_fmt_options[a:bin_name] : ""
+  endif
+  call extend(cmd, split(opts, " "))
+
+  if a:bin_name == "goimports"
     " lazy check if goimports support `-srcdir`. We should eventually remove
     " this in the future
     if !exists('b:goimports_vendor_compatible')
@@ -186,7 +216,9 @@ function! s:fmt_cmd(bin_name, source, target)
     if exists('b:goimports_vendor_compatible') && b:goimports_vendor_compatible
       let ssl_save = &shellslash
       set noshellslash
-      call extend(cmd, ["-srcdir", shellescape(fnamemodify(a:target, ":p"))])
+      " use the filename without the fully qualified name if the tree is
+      " symlinked into the GOPATH, goimports won't work properly.
+      call extend(cmd, ["-srcdir", shellescape(a:target)])
       let &shellslash = ssl_save
     endif
   endif
@@ -196,7 +228,7 @@ function! s:fmt_cmd(bin_name, source, target)
 endfunction
 
 " parse_errors parses the given errors and returns a list of parsed errors
-function! s:parse_errors(content) abort
+function! s:parse_errors(filename, content) abort
   let splitted = split(a:content, '\n')
 
   " list of errors to be put into location list
@@ -205,6 +237,7 @@ function! s:parse_errors(content) abort
     let tokens = matchlist(line, '^\(.\{-}\):\(\d\+\):\(\d\+\)\s*\(.*\)')
     if !empty(tokens)
       call add(errors,{
+            \"filename": a:filename,
             \"lnum":     tokens[2],
             \"col":      tokens[3],
             \"text":     tokens[4],
@@ -218,13 +251,13 @@ endfunction
 " show_errors opens a location list and shows the given errors. If the given
 " errors is empty, it closes the the location list
 function! s:show_errors(errors) abort
-  let l:listtype = "locationlist" 
+  let l:listtype = go#list#Type("GoFmt")
   if !empty(a:errors)
     call go#list#Populate(l:listtype, a:errors, 'Format')
     echohl Error | echomsg "Gofmt returned error" | echohl None
   endif
 
-  " this closes the window if there are no errors or it opens 
+  " this closes the window if there are no errors or it opens
   " it if there is any
   call go#list#Window(l:listtype, len(a:errors))
 endfunction
