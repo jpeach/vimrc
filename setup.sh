@@ -72,3 +72,11 @@ VIMRC=${VIMRC##$HOMEDIR/}
         echo Skipping Vagrantfile update ...
     fi
 )
+
+# Install some basic Fedora packages.
+if command -v dnf > /dev/null ; then
+    sudo dnf install -y \
+        ack \
+        global \
+        vim-enhanced
+fi
