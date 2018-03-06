@@ -4,11 +4,12 @@
 " Maintainer:   Ben Blum <bblum@cs.cmu.edu>
 " Maintainer:   Chris Morgan <me@chrismorgan.info>
 " Last Change:  Feb 24, 2016
+" For bugs, patches and license go to https://github.com/rust-lang/rust.vim
 
 if version < 600
-  syntax clear
+	syntax clear
 elseif exists("b:current_syntax")
-  finish
+	finish
 endif
 
 " Syntax definitions {{{1
@@ -29,10 +30,13 @@ syn keyword   rustKeyword     continue
 syn keyword   rustKeyword     extern nextgroup=rustExternCrate,rustObsoleteExternMod skipwhite skipempty
 syn keyword   rustKeyword     fn nextgroup=rustFuncName skipwhite skipempty
 syn keyword   rustKeyword     in impl let
+syn keyword   rustKeyword     macro
 syn keyword   rustKeyword     pub nextgroup=rustPubScope skipwhite skipempty
 syn keyword   rustKeyword     return
+syn keyword   rustKeyword     yield
 syn keyword   rustSuper       super
-syn keyword   rustKeyword     unsafe where
+syn keyword   rustKeyword     where
+syn keyword   rustUnsafeKeyword unsafe
 syn keyword   rustKeyword     use nextgroup=rustModPath skipwhite skipempty
 " FIXME: Scoped impl's name is also fallen in this category
 syn keyword   rustKeyword     mod trait nextgroup=rustIdentifier skipwhite skipempty
@@ -66,11 +70,11 @@ syn match rustMacroRepeatCount ".\?[*+]" contained
 syn match rustMacroVariable "$\w\+"
 
 " Reserved (but not yet used) keywords {{{2
-syn keyword   rustReservedKeyword alignof become do offsetof priv pure sizeof typeof unsized yield abstract virtual final override macro
+syn keyword   rustReservedKeyword alignof become do offsetof priv pure sizeof typeof unsized abstract virtual final override
 
 " Built-in types {{{2
-syn keyword   rustType        isize usize char bool u8 u16 u32 u64 f32
-syn keyword   rustType        f64 i8 i16 i32 i64 str Self
+syn keyword   rustType        isize usize char bool u8 u16 u32 u64 u128 f32
+syn keyword   rustType        f64 i8 i16 i32 i64 i128 str Self
 
 " Things from the libstd v1 prelude (src/libstd/prelude/v1.rs) {{{2
 " This section is just straight transformation of the contents of the prelude,
@@ -137,7 +141,7 @@ syn match     rustMacro       '#\w\(\w\)*' contains=rustAssert,rustPanic
 
 syn match     rustEscapeError   display contained /\\./
 syn match     rustEscape        display contained /\\\([nrt0\\'"]\|x\x\{2}\)/
-syn match     rustEscapeUnicode display contained /\\u{\x\{1,6}}/
+syn match     rustEscapeUnicode display contained /\\u{\%(\x_*\)\{1,6}}/
 syn match     rustStringContinuation display contained /\\\n\s*/
 syn region    rustString      start=+b"+ skip=+\\\\\|\\"+ end=+"+ contains=rustEscape,rustEscapeError,rustStringContinuation
 syn region    rustString      start=+"+ skip=+\\\\\|\\"+ end=+"+ contains=rustEscape,rustEscapeUnicode,rustEscapeError,rustStringContinuation,@Spell
@@ -150,10 +154,10 @@ syn region    rustDerive      start="derive(" end=")" contained contains=rustDer
 syn keyword   rustDeriveTrait contained Clone Hash RustcEncodable RustcDecodable Encodable Decodable PartialEq Eq PartialOrd Ord Rand Show Debug Default FromPrimitive Send Sync Copy
 
 " Number literals
-syn match     rustDecNumber   display "\<[0-9][0-9_]*\%([iu]\%(size\|8\|16\|32\|64\)\)\="
-syn match     rustHexNumber   display "\<0x[a-fA-F0-9_]\+\%([iu]\%(size\|8\|16\|32\|64\)\)\="
-syn match     rustOctNumber   display "\<0o[0-7_]\+\%([iu]\%(size\|8\|16\|32\|64\)\)\="
-syn match     rustBinNumber   display "\<0b[01_]\+\%([iu]\%(size\|8\|16\|32\|64\)\)\="
+syn match     rustDecNumber   display "\<[0-9][0-9_]*\%([iu]\%(size\|8\|16\|32\|64\|128\)\)\="
+syn match     rustHexNumber   display "\<0x[a-fA-F0-9_]\+\%([iu]\%(size\|8\|16\|32\|64\|128\)\)\="
+syn match     rustOctNumber   display "\<0o[0-7_]\+\%([iu]\%(size\|8\|16\|32\|64\|128\)\)\="
+syn match     rustBinNumber   display "\<0b[01_]\+\%([iu]\%(size\|8\|16\|32\|64\|128\)\)\="
 
 " Special case for numbers of the form "1." which are float literals, unless followed by
 " an identifier, which makes them integer literals with a method call or field access,
@@ -167,7 +171,7 @@ syn match     rustFloat       display "\<[0-9][0-9_]*\%(\.[0-9][0-9_]*\)\=\%([eE
 syn match     rustFloat       display "\<[0-9][0-9_]*\%(\.[0-9][0-9_]*\)\=\%([eE][+-]\=[0-9_]\+\)\=\(f32\|f64\)"
 
 " For the benefit of delimitMate
-syn region rustLifetimeCandidate display start=/&'\%(\([^'\\]\|\\\(['nrt0\\\"]\|x\x\{2}\|u{\x\{1,6}}\)\)'\)\@!/ end=/[[:cntrl:][:space:][:punct:]]\@=\|$/ contains=rustSigil,rustLifetime
+syn region rustLifetimeCandidate display start=/&'\%(\([^'\\]\|\\\(['nrt0\\\"]\|x\x\{2}\|u{\%(\x_*\)\{1,6}}\)\)'\)\@!/ end=/[[:cntrl:][:space:][:punct:]]\@=\|$/ contains=rustSigil,rustLifetime
 syn region rustGenericRegion display start=/<\%('\|[^[cntrl:][:space:][:punct:]]\)\@=')\S\@=/ end=/>/ contains=rustGenericLifetimeCandidate
 syn region rustGenericLifetimeCandidate display start=/\%(<\|,\s*\)\@<='/ end=/[[:cntrl:][:space:][:punct:]]\@=\|$/ contains=rustSigil,rustLifetime
 
@@ -178,7 +182,7 @@ syn match   rustCharacterInvalid   display contained /b\?'\zs[\n\r\t']\ze'/
 " The groups negated here add up to 0-255 but nothing else (they do not seem to go beyond ASCII).
 syn match   rustCharacterInvalidUnicode   display contained /b'\zs[^[:cntrl:][:graph:][:alnum:][:space:]]\ze'/
 syn match   rustCharacter   /b'\([^\\]\|\\\(.\|x\x\{2}\)\)'/ contains=rustEscape,rustEscapeError,rustCharacterInvalid,rustCharacterInvalidUnicode
-syn match   rustCharacter   /'\([^\\]\|\\\(.\|x\x\{2}\|u{\x\{1,6}}\)\)'/ contains=rustEscape,rustEscapeUnicode,rustEscapeError,rustCharacterInvalid
+syn match   rustCharacter   /'\([^\\]\|\\\(.\|x\x\{2}\|u{\%(\x_*\)\{1,6}}\)\)'/ contains=rustEscape,rustEscapeUnicode,rustEscapeError,rustCharacterInvalid
 
 syn match rustShebang /\%^#![^[].*/
 syn region rustCommentLine                                                  start="//"                      end="$"   contains=rustTodo,@Spell
@@ -246,6 +250,7 @@ hi def link rustUnion         rustStructure
 hi def link rustPubScopeDelim Delimiter
 hi def link rustPubScopeCrate rustKeyword
 hi def link rustSuper         rustKeyword
+hi def link rustUnsafeKeyword Exception
 hi def link rustReservedKeyword Error
 hi def link rustRepeat        Conditional
 hi def link rustConditional   Conditional

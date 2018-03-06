@@ -14,7 +14,7 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 function! SyntaxCheckers_rust_rustc_GetLocList() dict
-    let makeprg = self.makeprgBuild({ 'args': '-Zparse-only' })
+    let makeprg = self.makeprgBuild({})
 
     " Old errorformat (before nightly 2016/08/10)
     let errorformat  =
@@ -30,6 +30,7 @@ function! SyntaxCheckers_rust_rustc_GetLocList() dict
         \ '%-Gerror: Could not compile %.%#,' .
         \ '%Eerror: %m,' .
         \ '%Eerror[E%n]: %m,' .
+        \ '%-Gwarning: the option `Z` is unstable %.%#,' .
         \ '%Wwarning: %m,' .
         \ '%Inote: %m,' .
         \ '%C %#--> %f:%l:%c'

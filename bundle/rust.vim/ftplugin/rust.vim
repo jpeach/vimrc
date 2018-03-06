@@ -1,8 +1,9 @@
 " Language:     Rust
-" Description:  Vim syntax file for Rust
+" Description:  Vim ftplugin for Rust
 " Maintainer:   Chris Morgan <me@chrismorgan.info>
 " Maintainer:   Kevin Ballard <kevin@sb.org>
 " Last Change:  June 08, 2016
+" For bugs, patches and license go to https://github.com/rust-lang/rust.vim 
 
 if exists("b:did_ftplugin")
 	finish
@@ -186,22 +187,16 @@ let b:undo_ftplugin = "
 
 " Code formatting on save
 if get(g:, "rustfmt_autosave", 0)
-	autocmd BufWritePre *.rs call rustfmt#Format()
+	autocmd BufWritePre *.rs silent! call rustfmt#Format()
 endif
 
 augroup END
 
-" %-matching. <:> is handy for generics.
 set matchpairs+=<:>
-" There are two minor issues with it; (a) comparison operators in expressions,
-" where a less-than may match a greater-than later on—this is deemed a trivial
-" issue—and (b) `Fn() -> X` syntax. This latter issue is irremediable from the
-" highlighting perspective (built into Vim), but the actual % functionality
-" can be fixed by this use of matchit.vim.
+" For matchit.vim (rustArrow stops `Fn() -> X` messing things up)
 let b:match_skip = 's:comment\|string\|rustArrow'
-source $VIMRUNTIME/macros/matchit.vim
 
 let &cpo = s:save_cpo
 unlet s:save_cpo
 
-" vim: set noet sw=4 ts=4:
+" vim: set noet sw=8 ts=8:
