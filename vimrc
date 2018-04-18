@@ -188,14 +188,14 @@ if has("gui_running")
     set printfont=Menlo\ Regular:h6
     set lines=60
     set guioptions-=T " Hide the GUI toolbar
-
-    colorscheme solarized
 endif
 
 set termguicolors
 
 " All my terminals are dark these days. I wonder how I could autodetect this?
 set background=dark
+
+colorscheme gruvbox
 
 set relativenumber
 
