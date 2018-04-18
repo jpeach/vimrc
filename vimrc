@@ -216,6 +216,25 @@ augroup Tmux "{{{2
     autocmd VimLeave * call system('tmux rename-window ' . split(substitute(getcwd(), $HOME, '~', ''), '/')[-1])
 augroup END
 
+if executable('cquery')
+    if (!isdirectory(expand("~/tmp/vim.cquery")))
+        call mkdir(expand("~/tmp/vim.cquery"), "p", 0755)
+    endif
+
+   au User lsp_setup call lsp#register_server({
+      \ 'name': 'cquery',
+      \ 'cmd': {server_info->['cquery']},
+      \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
+      \ 'initialization_options': { 'cacheDirectory': expand('~/tmp/vim.cquery') },
+      \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
+      \ })
+
+    " ,ls: Find symbol
+    map <Leader>ls :LspReferences<CR>
+    " ,ld: Find definition
+    map <Leader>ld :LspDefinition<CR>
+endif
+
 " Load .vimrc and .exrc files in the current working directory
 set exrc
 " But do it carefully
