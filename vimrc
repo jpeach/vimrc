@@ -188,16 +188,16 @@ if has("gui_running")
     set printfont=Menlo\ Regular:h6
     set lines=60
     set guioptions-=T " Hide the GUI toolbar
-    " Relative numbering only in GUI mode, since it doesn't draw right in
-    " some terminals.
-    set relativenumber
+
     colorscheme solarized
-else
-    colorscheme default
 endif
+
+set termguicolors
 
 " All my terminals are dark these days. I wonder how I could autodetect this?
 set background=dark
+
+set relativenumber
 
 " Set up the fugitive plugin
 runtime plugin/fugitive.vim
