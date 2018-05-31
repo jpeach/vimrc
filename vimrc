@@ -195,7 +195,7 @@ function! CscopeInit()
     endif
 
     set csto=0    " Search cscope before tags.
-    set csverb    " Don't be verbose
+    set nocsverb  " Don't be verbose
 
     let l:cquery = filereadable('.cquery') || filereadable('compile_commands.json')
     let l:gtags = filereadable('GTAGS')
