@@ -127,25 +127,47 @@ if winwidth(0) > 80
     let g:tagbar_width = 60
 endif
 
-" Set up gtags (cscope) integration
-function! CscopeInit()
-    if !has("cscope")
-      return
-    endif
+" Return the current cursor position as "file:line:col"
+function! s:position()
+    return expand('%') . ':' . line('.') . ':' . col('.')
+endfunction
 
-    set csto=0      " Search cscope before tags.
-    set nocsverb    " Don't be verbose
+" Initialize cscope-lsp, see https://github.com/jpeach/cscope-lsp
+function! s:cscope_lsp_init()
 
-    let found = 0
+    execute ':set cscopeprg=' . exepath('cscope-lsp')
 
-    for d in [ '/opt/local/bin', '/usr/local/bin', '/usr/bin' ]
-        let gs = d . "/gtags-cscope"
-        if filereadable(gs) && filereadable("GTAGS")
-            execute ":set cscopeprg=" . gs
-            execute ":cs add GTAGS"
-            break
+    " Pick an arbitrary file to placehold for the cscope index.
+    for t in ['.cquery', 'compile_commands.json']
+        if filereadable(t)
+            execute ':cs add ' . t
         endif
     endfor
+
+    " css: Find symbol
+    map <Leader>cs :cs find s <C-R>=<SID>position()<CR><CR>
+    " csg: Find definition
+    map <Leader>cg :cs find g <C-R>=<SID>position()<CR><CR>
+    " csc: Find callers
+    map <Leader>cc :cs find c <C-R>=<SID>position()<CR><CR>
+    " csd: Find callees
+    map <Leader>cd :cs find d <C-R>=<SID>position()<CR><CR>
+    " cst: Find text string
+    map <Leader>ct :cs find t <C-R>=<SID>position()<CR><CR>
+    " cse: Find egrep pattern
+    map <Leader>ce :cs find e <C-R>=<SID>position()<CR><CR>
+    " csf: Find file
+    map <Leader>cf :cs find f <C-R>=<SID>position()<CR><CR>
+    " csi: Find files #including this
+    map <Leader>ci :cs find i <C-R>=<SID>position()<CR><CR>
+
+endfunction
+
+" Initialize gtags-cscope.
+function! s:cscope_gtags_init()
+
+    execute ':set cscopeprg=' . exepath('gtags-cscope')
+    execute ":cs add GTAGS"
 
     " css: Find symbol
     map <Leader>cs :cs find s <C-R>=expand("<cword>")<CR><CR>
@@ -163,6 +185,26 @@ function! CscopeInit()
     map <Leader>cf :cs find f <C-R>=expand("<cfile>")<CR><CR>
     " csi: Find files #including this
     map <Leader>ci :cs find i <C-R>=expand("<cfile>")<CR><CR>
+
+endfunction
+
+" Set up gtags (cscope) integration
+function! CscopeInit()
+    if !has("cscope")
+      return
+    endif
+
+    set csto=0    " Search cscope before tags.
+    set csverb    " Don't be verbose
+
+    let l:cquery = filereadable('.cquery') || filereadable('compile_commands.json')
+    let l:gtags = filereadable('GTAGS')
+
+    if executable('cscope-lsp') && executable('cquery') && l:cquery
+        call s:cscope_lsp_init()
+    elseif executable('gtags-cscope') && l:gtags
+        call s:cscope_gtags_init()
+    endif
 
 endfunction
 
@@ -215,25 +257,6 @@ augroup Tmux "{{{2
     autocmd VimEnter,BufNewFile,BufReadPost * call system('tmux rename-window "vim - ' . split(substitute(getcwd(), $HOME, '~', ''), '/')[-1] . '"')
     autocmd VimLeave * call system('tmux rename-window ' . split(substitute(getcwd(), $HOME, '~', ''), '/')[-1])
 augroup END
-
-if executable('cquery')
-    if (!isdirectory(expand("~/tmp/vim.cquery")))
-        call mkdir(expand("~/tmp/vim.cquery"), "p", 0755)
-    endif
-
-   au User lsp_setup call lsp#register_server({
-      \ 'name': 'cquery',
-      \ 'cmd': {server_info->['cquery']},
-      \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'compile_commands.json'))},
-      \ 'initialization_options': { 'cacheDirectory': expand('~/tmp/vim.cquery') },
-      \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp', 'cc'],
-      \ })
-
-    " ,ls: Find symbol
-    map <Leader>ls :LspReferences<CR>
-    " ,ld: Find definition
-    map <Leader>ld :LspDefinition<CR>
-endif
 
 " Load .vimrc and .exrc files in the current working directory
 set exrc
