@@ -1,0 +1,21 @@
+#! /usr/bin/env bash
+
+set -e # exit on error
+
+WORK=$(mktemp -d)
+PREFIX=$HOME/inst/cquery
+
+cd $WORK
+
+git clone --depth=1 https://github.com/cquery-project/cquery.git
+cd cquery
+
+git submodule update --init --recursive
+./waf configure install --prefix="$PREFIX"
+
+for prg in $(find $PREFIX/bin -type f) ; do
+    ln -sf $prg $HOME/bin/$(basename $prg)
+done
+
+cd /
+rm -rf $WORK
