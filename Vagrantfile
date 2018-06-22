@@ -66,4 +66,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.network "private_network", ip: "172.16.0.11"
   end
 
+  config.vm.define "fedora28" do |config|
+    config.vm.hostname = "fedora-28"
+    config.vm.box = "fedora/28-cloud-base"
+    config.vm.network :private_network, ip: "172.16.0.12"
+  end
+
 end
