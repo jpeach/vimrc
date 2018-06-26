@@ -239,6 +239,7 @@ set background=dark
 
 colorscheme gruvbox
 
+set number
 set relativenumber
 
 " Set up the fugitive plugin
