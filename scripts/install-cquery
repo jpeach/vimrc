@@ -4,6 +4,7 @@ set -e # exit on error
 
 WORK=$(mktemp -d)
 PREFIX=$HOME/inst/cquery
+NPROC=${NPROC:-$(getconf _NPROCESSORS_ONLN)}
 
 cd $WORK
 
@@ -11,7 +12,12 @@ git clone --depth=1 https://github.com/cquery-project/cquery.git
 cd cquery
 
 git submodule update --init --recursive
-./waf configure install --prefix="$PREFIX"
+
+mkdir build
+cd build
+
+cmake .. -DCMAKE_BUILD_TYPE=release -DCMAKE_INSTALL_PREFIX="$PREFIX"
+make -j$NPROC install
 
 for prg in $(find $PREFIX/bin -type f) ; do
     ln -sf $prg $HOME/bin/$(basename $prg)
