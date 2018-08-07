@@ -24,5 +24,5 @@ export SSH_AUTH_SOCK="$AGENT"
 if $TMUX_PROG has-session ; then
     exec $TMUX_PROG -u -CC attach
 else
-    exec $TMUX_PROG -u -CC
+    exec $TMUX_PROG -2 -u -CC
 fi
