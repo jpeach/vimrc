@@ -6,18 +6,19 @@ func! Test_GoTest() abort
         \ {'lnum': 16, 'bufnr': 2, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'helper badness'},
         \ {'lnum': 20, 'bufnr': 2, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'this is an error'},
         \ {'lnum': 0, 'bufnr': 0, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'and a second line, too'},
-        \ {'lnum': 25, 'bufnr': 2, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'this is a sub-test error'},
+        \ {'lnum': 21, 'bufnr': 2, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': ''},
+        \ {'lnum': 0, 'bufnr': 0, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'this is another error'},
+        \ {'lnum': 26, 'bufnr': 2, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'this is a sub-test error'},
         \ {'lnum': 0, 'bufnr': 0, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'and a second line, too'},
         \ {'lnum': 6, 'bufnr': 3, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'another package badness'},
-        \ {'lnum': 42, 'bufnr': 2, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'panic: worst ever [recovered]'}
+        \ {'lnum': 43, 'bufnr': 2, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'panic: worst ever [recovered]'}
       \ ]
   call s:test('play/play_test.go', expected)
-
 endfunc
 
 func! Test_GoTestConcurrentPanic()
   let expected = [
-        \ {'lnum': 49, 'bufnr': 2, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'panic: concurrent fail'}
+        \ {'lnum': 50, 'bufnr': 2, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'panic: concurrent fail'}
       \ ]
   call s:test('play/play_test.go', expected, "-run", "TestConcurrentPanic")
 endfunc
@@ -30,11 +31,13 @@ func! Test_GoTestVerbose() abort
         \ {'lnum': 16, 'bufnr': 2, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'helper badness'},
         \ {'lnum': 20, 'bufnr': 2, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'this is an error'},
         \ {'lnum': 0, 'bufnr': 0, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'and a second line, too'},
-        \ {'lnum': 25, 'bufnr': 2, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'this is a sub-test error'},
+        \ {'lnum': 21, 'bufnr': 2, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': ''},
+        \ {'lnum': 0, 'bufnr': 0, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'this is another error'},
+        \ {'lnum': 26, 'bufnr': 2, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'this is a sub-test error'},
         \ {'lnum': 0, 'bufnr': 0, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'and a second line, too'},
-        \ {'lnum': 31, 'bufnr': 2, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'goodness'},
+        \ {'lnum': 32, 'bufnr': 2, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'goodness'},
         \ {'lnum': 6, 'bufnr': 3, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'another package badness'},
-        \ {'lnum': 42, 'bufnr': 2, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'panic: worst ever [recovered]'}
+        \ {'lnum': 43, 'bufnr': 2, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'panic: worst ever [recovered]'}
       \ ]
   call s:test('play/play_test.go', expected, "-v")
 endfunc
@@ -43,8 +46,46 @@ func! Test_GoTestCompilerError() abort
   let expected = [
         \ {'lnum': 6, 'bufnr': 6, 'col': 22, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'syntax error: unexpected newline, expecting comma or )'}
       \ ]
-
   call s:test('compilerror/compilerror_test.go', expected)
+endfunc
+
+func! Test_GoTestTimeout() abort
+  let expected = [
+        \ {'lnum': 0, 'bufnr': 0, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'panic: test timed out after 500ms'}
+      \ ]
+
+  let g:go_test_timeout="500ms"
+  call s:test('timeout/timeout_test.go', expected)
+  unlet g:go_test_timeout
+endfunc
+
+func! Test_GoTestShowName() abort
+  let expected = [
+        \ {'lnum': 0, 'bufnr': 0, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'TestHelloWorld'},
+        \ {'lnum': 6, 'bufnr': 9, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'so long'},
+        \ {'lnum': 0, 'bufnr': 0, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'TestHelloWorld/sub'},
+        \ {'lnum': 9, 'bufnr': 9, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'thanks for all the fish'},
+      \ ]
+
+  let g:go_test_show_name=1
+  call s:test('showname/showname_test.go', expected)
+  unlet g:go_test_show_name
+endfunc
+
+func! Test_GoTestVet() abort
+  let expected = [
+        \ {'lnum': 6, 'bufnr': 16, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'Errorf format %v reads arg #1, but call has only 0 args'},
+      \ ]
+  call s:test('veterror/veterror.go', expected)
+endfunc
+
+func! Test_GoTestTestCompilerError() abort
+  let expected = [
+        \ {'lnum': 10, 'bufnr': 11, 'col': 16, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'cannot use r (type struct {}) as type io.Reader in argument to ioutil.ReadAll:'},
+        \ {'lnum': 0, 'bufnr': 0, 'col': 0, 'valid': 1, 'vcol': 0, 'nr': -1, 'type': '', 'pattern': '', 'text': 'struct {} does not implement io.Reader (missing Read method)'}
+      \ ]
+
+  call s:test('testcompilerror/testcompilerror_test.go', expected)
 endfunc
 
 func! s:test(file, expected, ...) abort
@@ -57,7 +98,7 @@ func! s:test(file, expected, ...) abort
     " the tests will run for Neovim, too.
     return
   endif
-  let $GOPATH = fnameescape(expand("%:p:h")) . '/test-fixtures/test'
+  let $GOPATH = fnameescape(fnamemodify(getcwd(), ':p')) . 'test-fixtures/test'
   silent exe 'e ' . $GOPATH . '/src/' . a:file
 
   " clear the quickfix lists
@@ -69,7 +110,7 @@ func! s:test(file, expected, ...) abort
   endif
 
   " run the tests
-  call call(function('go#test#Test'), args)
+  silent call call(function('go#test#Test'), args)
 
   let actual = getqflist()
   let start = reltime()
@@ -78,42 +119,15 @@ func! s:test(file, expected, ...) abort
     let actual = getqflist()
   endwhile
 
-  " for some reason, when run headless, the quickfix lists includes a line
-  " that should have been filtered out; remove it manually. The line is not
-  " present when run manually.
-  let i = 0
-  while i < len(actual)
-    if actual[i].text =~# '^=== RUN   .*'
-      call remove(actual, i)
-    endif
-    let i += 1
-  endwhile
+  for item in actual
+    let item.text = s:normalize_durations(item.text)
+  endfor
 
-  call assert_equal(len(a:expected), len(actual), "number of errors")
-  if len(a:expected) != len(actual)
-    return
-  endif
+  for item in a:expected
+    let item.text = s:normalize_durations(item.text)
+  endfor
 
-  let i = 0
-  while i < len(a:expected)
-    let expected_item = a:expected[i]
-    let actual_item = actual[i]
-    let i += 1
-
-    call assert_equal(expected_item.bufnr, actual_item.bufnr, "bufnr")
-    call assert_equal(expected_item.lnum, actual_item.lnum, "lnum")
-    call assert_equal(expected_item.col, actual_item.col, "col")
-    call assert_equal(expected_item.vcol, actual_item.vcol, "vcol")
-    call assert_equal(expected_item.nr, actual_item.nr, "nr")
-    call assert_equal(expected_item.pattern, actual_item.pattern, "pattern")
-
-    let expected_text = s:normalize_durations(expected_item.text)
-    let actual_text = s:normalize_durations(actual_item.text)
-
-    call assert_equal(expected_text, actual_text, "text")
-    call assert_equal(expected_item.type, actual_item.type, "type")
-    call assert_equal(expected_item.valid, actual_item.valid, "valid")
-  endwhile
+  call gotest#assert_quickfix(actual, a:expected)
 endfunc
 
 func! s:normalize_durations(str) abort
