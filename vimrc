@@ -188,6 +188,21 @@ function! s:cscope_gtags_init()
 
 endfunction
 
+" Initialize cscope keybindings for Go using vim-go.
+function! s:cscope_go_init()
+    " css: Find symbol
+    " csg: Find definition
+    map <Leader>cg :GoDef<CR><CR>
+    " csc: Find callers
+    map <Leader>cc :GoCallers<CR><CR>
+    " csd: Find callees
+    map <Leader>cd :GoCallees<CR><CR>
+    " cst: Find text string
+    " cse: Find egrep pattern
+    " csf: Find file
+    " csi: Find files #including this
+endfunction
+
 " Set up gtags (cscope) integration
 function! CscopeInit()
     if !has("cscope")
@@ -209,6 +224,7 @@ function! CscopeInit()
 endfunction
 
 call CscopeInit()
+autocmd FileType go call s:cscope_go_init()
 
 " Highlight trailing whitespace.
 if has("syntax") && (&t_Co > 2 || has("gui_running"))
@@ -277,3 +293,5 @@ let g:go_metalinter_autosave = 1
 
 " Autoformat rust code on save.
 let g:rustfmt_autosave = 1
+
+let g:go_auto_type_info = 1
