@@ -108,11 +108,18 @@ map <Leader>s :%!git stripspace<CR>
 " Map ,j to use jq to format the current buffer
 map <Leader>j :%!jq .<CR>
 
-" CtrlP - fuzzy file finder; http://kien.github.io/ctrlp.vim/
-" Map ,t to Most Recently Used file find
-map <Leader>t :CtrlP<CR>
-" Map ,b to buffer find
-map <Leader>b :CtrlPBuffer<CR>
+" Check for the Homebrew install of fzf.
+if isdirectory('/usr/local/opt/fzf/plugin')
+    set runtimepath+=/usr/local/opt/fzf
+    " Map ,t to fuzzy find
+    map <Leader>t :FZF<CR>
+else
+    " CtrlP - fuzzy file finder; http://kien.github.io/ctrlp.vim/
+    " Map ,t to Most Recently Used file find
+    map <Leader>t :CtrlP<CR>
+    " Map ,b to buffer find
+    map <Leader>b :CtrlPBuffer<CR>
+endif
 
 " Map ,T to toggle the tagbar plugin.
 map <Leader>T :TagbarToggle<CR>
