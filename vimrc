@@ -113,6 +113,11 @@ if isdirectory('/usr/local/opt/fzf/plugin')
     set runtimepath+=/usr/local/opt/fzf
     " Map ,t to fuzzy find
     map <Leader>t :FZF<CR>
+" Check for the Fedora install of fzf.
+elseif  isdirectory('/usr/share/vim/vimfiles/plugin')
+    set runtimepath+=/usr/share/vim/vimfiles
+    " Map ,t to fuzzy find
+    map <Leader>t :FZF<CR>
 else
     " CtrlP - fuzzy file finder; http://kien.github.io/ctrlp.vim/
     " Map ,t to Most Recently Used file find
