@@ -1,3 +1,7 @@
+" don't spam the user when Vim is started in Vi compatibility mode
+let s:cpo_save = &cpo
+set cpo&vim
+
 " PathSep returns the appropriate OS specific path separator.
 function! go#util#PathSep() abort
   if go#util#IsWin()
@@ -61,9 +65,13 @@ endfunction
 
 " Check if Vim jobs API is supported.
 "
-" The (optional) first paramter can be added to indicate the 'cwd' or 'env'
+" The (optional) first parameter can be added to indicate the 'cwd' or 'env'
 " parameters will be used, which wasn't added until a later version.
 function! go#util#has_job(...) abort
+  if has('nvim')
+    return 1
+  endif
+
   " cwd and env parameters to job_start was added in this version.
   if a:0 > 0 && a:1 is 1
     return has('job') && has("patch-8.0.0902")
@@ -123,6 +131,13 @@ function! go#util#gopath() abort
   return substitute(s:exec(['go', 'env', 'GOPATH'])[0], '\n', '', 'g')
 endfunction
 
+" gomod returns 'go env GOMOD'. gomod changes depending on the folder. Don't
+" use go#util#env as it caches the value.
+function! go#util#gomod() abort
+  return substitute(s:exec(['go', 'env', 'GOMOD'])[0], '\n', '', 'g')
+endfunction
+
+
 function! go#util#osarch() abort
   return go#util#env("goos") . '_' . go#util#env("goarch")
 endfunction
@@ -133,12 +148,13 @@ endfunction
 " so that we always use a standard POSIX-compatible Bourne shell (and not e.g.
 " csh, fish, etc.) See #988 and #1276.
 function! s:system(cmd, ...) abort
-  " Preserve original shell and shellredir values
+  " Preserve original shell, shellredir and shellcmdflag values
   let l:shell = &shell
   let l:shellredir = &shellredir
+  let l:shellcmdflag = &shellcmdflag
 
   if !go#util#IsWin() && executable('/bin/sh')
-      set shell=/bin/sh shellredir=>%s\ 2>&1
+      set shell=/bin/sh shellredir=>%s\ 2>&1 shellcmdflag=-c
   endif
 
   try
@@ -147,6 +163,7 @@ function! s:system(cmd, ...) abort
     " Restore original values
     let &shell = l:shell
     let &shellredir = l:shellredir
+    let &shellcmdflag = l:shellcmdflag
   endtry
 endfunction
 
@@ -177,6 +194,22 @@ function! go#util#Exec(cmd, ...) abort
   " Finally execute the command using the full, resolved path. Do not pass the
   " unmodified command as the correct program might not exist in $PATH.
   return call('s:exec', [[l:bin] + a:cmd[1:]] + a:000)
+endfunction
+
+function! go#util#ExecInDir(cmd, ...) abort
+  if !isdirectory(expand("%:p:h"))
+    return ['', 1]
+  endif
+
+  let cd = exists('*haslocaldir') && haslocaldir() ? 'lcd ' : 'cd '
+  let dir = getcwd()
+  try
+    execute cd . fnameescape(expand("%:p:h"))
+    let [l:out, l:err] = call('go#util#Exec', [a:cmd] + a:000)
+  finally
+    execute cd . fnameescape(l:dir)
+  endtry
+  return [l:out, l:err]
 endfunction
 
 function! s:exec(cmd, ...) abort
@@ -423,5 +456,71 @@ endfunction
 function! go#util#HasDebug(flag)
   return index(go#config#Debug(), a:flag) >= 0
 endfunction
+
+function! go#util#OpenBrowser(url) abort
+    let l:cmd = go#config#PlayBrowserCommand()
+    if len(l:cmd) == 0
+        redraw
+        echohl WarningMsg
+        echo "It seems that you don't have general web browser. Open URL below."
+        echohl None
+        echo a:url
+        return
+    endif
+
+    " if setting starts with a !.
+    if l:cmd =~ '^!'
+        let l:cmd = substitute(l:cmd, '%URL%', '\=escape(shellescape(a:url), "#")', 'g')
+        silent! exec l:cmd
+    elseif cmd =~ '^:[A-Z]'
+        let l:cmd = substitute(l:cmd, '%URL%', '\=escape(a:url,"#")', 'g')
+        exec l:cmd
+    else
+        let l:cmd = substitute(l:cmd, '%URL%', '\=shellescape(a:url)', 'g')
+        call go#util#System(l:cmd)
+    endif
+endfunction
+
+function! go#util#ParseErrors(lines) abort
+  let errors = []
+
+  for line in a:lines
+    let fatalerrors = matchlist(line, '^\(fatal error:.*\)$')
+    let tokens = matchlist(line, '^\s*\(.\{-}\):\(\d\+\):\s*\(.*\)')
+
+    if !empty(fatalerrors)
+      call add(errors, {"text": fatalerrors[1]})
+    elseif !empty(tokens)
+      " strip endlines of form ^M
+      let out = substitute(tokens[3], '\r$', '', '')
+
+      call add(errors, {
+            \ "filename" : fnamemodify(tokens[1], ':p'),
+            \ "lnum"     : tokens[2],
+            \ "text"     : out,
+            \ })
+    elseif !empty(errors)
+      " Preserve indented lines.
+      " This comes up especially with multi-line test output.
+      if match(line, '^\s') >= 0
+        call add(errors, {"text": substitute(line, '\r$', '', '')})
+      endif
+    endif
+  endfor
+
+  return errors
+endfunction
+
+function! go#util#ShowInfo(info)
+  if empty(a:info)
+    return
+  endif
+
+  echo "vim-go: " | echohl Function | echon a:info | echohl None
+endfunction
+
+" restore Vi compatibility settings
+let &cpo = s:cpo_save
+unlet s:cpo_save
 
 " vim: sw=2 ts=2 et
