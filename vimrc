@@ -203,6 +203,7 @@ endfunction
 " Initialize cscope keybindings for Go using vim-go.
 function! s:cscope_go_init()
     " css: Find symbol
+    map <Leader>cs :GoReferrers<CR><CR>
     " csg: Find definition
     map <Leader>cg :GoDef<CR><CR>
     " csc: Find callers
@@ -295,13 +296,20 @@ set secure
 " Use goimports to format imports idiomatically.
 let g:go_fmt_command = "goimports"
 
-" Enable more syntac highlights.
+" Enable more syntax highlights.
 let g:go_highlight_types = 1
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
 
 " Run vet, lint, etc on save. This picks up a reasonable amount of issues.
 let g:go_metalinter_autosave = 1
+
+" Automatically highlight matching identifiers
+let g:go_auto_sameids = 1
+
+" Always use quickfix llists rather than location lists so that :.cc (jump to
+" error under cursor) works
+let g:go_list_type = "quickfix""
 
 " Autoformat rust code on save.
 let g:rustfmt_autosave = 1
