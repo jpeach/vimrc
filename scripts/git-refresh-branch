@@ -1,0 +1,16 @@
+#! /usr/bin/env bash
+
+# Refresh the current branch against the working copy of master.
+
+GIT=${GIT:-git}
+
+CURRENT=$(${GIT} rev-parse --abbrev-ref HEAD)
+
+## TODO(jpeach): automatically figure out which branch we are
+# rebasing onto.
+BASE=${BASE:-master}
+
+${GIT} checkout ${BASE}
+${GIT} pull
+${GIT} checkout ${CURRENT}
+${GIT} rebase ${BASE}
