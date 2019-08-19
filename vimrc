@@ -311,6 +311,12 @@ let g:go_auto_sameids = 1
 " error under cursor) works
 let g:go_list_type = "quickfix""
 
+" Use golanci for metalinter.
+let g:go_metalinter_command = 'golangci-lint'
+
+let g:go_def_mode = 'gopls'
+let g:go_info_mode = 'gopls'
+
 " Autoformat rust code on save.
 let g:rustfmt_autosave = 1
 
