@@ -61,6 +61,7 @@ VIMRC=${VIMRC##$HOMEDIR/}
     linkit $VIMRC ~/.vim
 
     linkit $VIMRC/aliases ~/.aliases
+    linkit $VIMRC/bashrc ~/.bashrc
 
     # Make this an absolute symlink.
     linkit $(pwd)/$VIMRC/tmux-cc ~/bin/tmux-cc
