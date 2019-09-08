@@ -13,7 +13,7 @@
 " limitations under the License.
 
 " Set up plugins.
-call plug#begin('~/.vim/vim-plug.install')
+call plug#begin('~/.vim/bundle')
 
 " https://github.com/fatih/vim-go
 Plug 'fatih/vim-go', { 'tag': '*', 'do': ':GoUpdateBinaries' }
