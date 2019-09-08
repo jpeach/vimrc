@@ -1,5 +1,6 @@
 #! /bin/bash
-# Copyright 2010 James Peach
+
+# Copyright 2019 James Peach
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -54,7 +55,14 @@ VIMRC=${VIMRC##$HOMEDIR/}
     [[ -d "$VIMRC" ]] || VIMRC="/${VIMRC}"
     [[ -d "$VIMRC" ]] || error "can't find $VIMRC"
     [[ -d ~/bin ]] || mkdir ~/bin
+
+    # Remove any old symlink first so that we don't follow it.
+    [[ -L ~/.vim ]] && rm -v ~/.vim
+
+    # If it's an old directory, save it.
     [[ -d ~/.vim ]] && mv ~/.vim ~/.vim.old
+
+    ls -l ~/.vim
 
     linkit $VIMRC/tmux.conf ~/.tmux.conf
     linkit $VIMRC/vimrc ~/.vimrc
@@ -75,6 +83,11 @@ VIMRC=${VIMRC##$HOMEDIR/}
         echo Skipping Vagrantfile update ...
     fi
 )
+
+# Update vim-plug.
+curl --silent --fail --location --create-dirs \
+    --output ~/.vim/autoload/plug.vim \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 # Install some basic Fedora packages.
 if command -v dnf > /dev/null ; then

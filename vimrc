@@ -12,12 +12,60 @@
 " See the License for the specific language governing permissions and
 " limitations under the License.
 
-execute pathogen#infect()
-execute pathogen#helptags()
+" Set up plugins.
+call plug#begin('~/.vim/vim-plug.install')
+
+" https://github.com/fatih/vim-go
+Plug 'fatih/vim-go', { 'tag': '*', 'do': ':GoUpdateBinaries' }
+
+" https://github.com/junegunn/fzf.vim
+Plug 'junegunn/fzf.vim'
+
+" https://github.com/majutsushi/tagbar
+Plug 'majutsushi/tagbar'
+
+" https://github.com/tpope/vim-fugitive
+Plug 'tpope/vim-fugitive'
+
+" https://github.com/tpope/vim-sensible
+Plug 'tpope/vim-sensible'
+
+" https://github.com/morhetz/gruvbox
+Plug 'morhetz/gruvbox'
+
+" https://github.com/vim-airline/vim-airline
+Plug 'vim-airline/vim-airline'
+
+" https://github.com/ctrlpvim/ctrlp.vim
+Plug 'ctrlpvim/ctrlp.vim'
+
+" https://github.com/altercation/vim-colors-solarized
+Plug 'altercation/vim-colors-solarized'
+
+" https://github.com/mileszs/ack.vim
+Plug 'mileszs/ack.vim'
+
+" https://github.com/nvie/vim-flake8
+Plug 'nvie/vim-flake8'
+
+call plug#end()
 
 " Force the sensible plugin to run now so that we can override what it
 " does if we want.
-runtime! plugin/sensible.vim
+call plug#load('vim-sensible')
+
+" Set , as <Leader>
+let mapleader=","
+
+" Be paranoid, and automatically set up autobackup
+if (!isdirectory(expand("~/tmp/vim.backup")))
+    call mkdir(expand("~/tmp/vim.backup"), "p", 0755)
+endif
+
+set backupdir=~/tmp/vim.backup
+set backup
+set writebackup
+set backupext=.bak
 
 " Basic settings.
 set nocompatible  " Don't be vi compatible
@@ -47,43 +95,48 @@ endif
 " Obviously we want syntax highlighting :)
 syntax on
 
-" Set , as <Leader>
-let mapleader=","
-
-" Don't let the CtrlP plugin map <C-P>
-let g:ctrlp_map=''
-
-let g:alternateExtensions_hpp = "cpp,cc,c"
-let g:alternateExtensions_cc = "hpp,h"
-
-" Be paranoid, and automatically set up autobackup
-if (!isdirectory(expand("~/tmp/vim.backup")))
-    call mkdir(expand("~/tmp/vim.backup"), "p", 0755)
+" Check for the Homebrew install of fzf.
+if isdirectory('/usr/local/opt/fzf/plugin')
+    set runtimepath+=/usr/local/opt/fzf
+    " Map ,t to fuzzy find
+    map <Leader>t :FZF<CR>
+" Check for the Fedora install of fzf.
+elseif  isdirectory('/usr/share/vim/vimfiles/plugin')
+    set runtimepath+=/usr/share/vim/vimfiles
+    " Map ,t to fuzzy find
+    map <Leader>t :FZF<CR>
+else
+    " CtrlP - fuzzy file finder; http://kien.github.io/ctrlp.vim/
+    " Map ,t to Most Recently Used file find
+    map <Leader>t :CtrlP<CR>
+    " Map ,b to buffer find
+    map <Leader>b :CtrlPBuffer<CR>
 endif
-set backupdir=~/tmp/vim.backup
-set backup
-set writebackup
-set backupext=.bak
 
 " Key bindings
 map <C-A> :b#<CR>
 map <C-N> :bn<CR>
 map <C-P> :bp<CR>
-"
+
 " Make regex special characters special by default (see :help pattern).
 noremap / /\v
 vnoremap / /\v
 
 filetype plugin indent on
 
+" Load a decent man page viewer
+runtime ftplugin/man.vim
+map K :Man <C-R>=expand("<cword>")<CR><CR>
 
 " special handling for different file types
 autocmd BufNewFile,BufRead *.log set tw=65
 autocmd BufNewFile,BufRead *.txt set tw=65
 autocmd BufNewFile,BufRead *.msg set tw=65
+
 " Turn off funky tabbing modes for makefiles
 autocmd BufNewFile,BufRead *[Mm]akefile* set sts=0 noet ts=8 sw=8
 autocmd BufNewFile,BufRead *.make set sts=0 noet ts=8 sw=8
+
 " Map ,8 to the flake8 command in python mode
 autocmd FileType python map <buffer> <Leader>8 :call Flake8()<CR>
 
@@ -108,36 +161,8 @@ map <Leader>s :%!git stripspace<CR>
 " Map ,j to use jq to format the current buffer
 map <Leader>j :%!jq .<CR>
 
-" Check for the Homebrew install of fzf.
-if isdirectory('/usr/local/opt/fzf/plugin')
-    set runtimepath+=/usr/local/opt/fzf
-    " Map ,t to fuzzy find
-    map <Leader>t :FZF<CR>
-" Check for the Fedora install of fzf.
-elseif  isdirectory('/usr/share/vim/vimfiles/plugin')
-    set runtimepath+=/usr/share/vim/vimfiles
-    " Map ,t to fuzzy find
-    map <Leader>t :FZF<CR>
-else
-    " CtrlP - fuzzy file finder; http://kien.github.io/ctrlp.vim/
-    " Map ,t to Most Recently Used file find
-    map <Leader>t :CtrlP<CR>
-    " Map ,b to buffer find
-    map <Leader>b :CtrlPBuffer<CR>
-endif
-
 " Map ,T to toggle the tagbar plugin.
 map <Leader>T :TagbarToggle<CR>
-
-if filereadable($HOME . '/bin/ctags')
-    let g:tagbar_ctags_bin = $HOME . '/bin/ctags'
-endif
-
-" 60 is a more readable width than 40, especially if the
-" terminal is fullscreen.
-if winwidth(0) > 80
-    let g:tagbar_width = 60
-endif
 
 " Return the current cursor position as "file:line:col"
 function! s:position()
@@ -271,27 +296,30 @@ colorscheme gruvbox
 set number
 set relativenumber
 
-" Set up the fugitive plugin
-runtime plugin/fugitive.vim
-if exists("*fugitive#statusline")
-    set statusline=\ [%n]\ %{fugitive#statusline()}\ %f\ %m%r%=%l/%L\
-endif
-
-" Load a decent man page viewer
-runtime ftplugin/man.vim
-map K :Man <C-R>=expand("<cword>")<CR><CR>
-
-augroup Tmux "{{{2
-    au!
-
-    autocmd VimEnter,BufNewFile,BufReadPost * call system('tmux rename-window "vim - ' . split(substitute(getcwd(), $HOME, '~', ''), '/')[-1] . '"')
-    autocmd VimLeave * call system('tmux rename-window ' . split(substitute(getcwd(), $HOME, '~', ''), '/')[-1])
-augroup END
-
 " Load .vimrc and .exrc files in the current working directory
 set exrc
 " But do it carefully
 set secure
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"" Set plugin configurations.
+"
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+if filereadable($HOME . '/bin/ctags')
+    let g:tagbar_ctags_bin = $HOME . '/bin/ctags'
+endif
+
+" 60 is a more readable width than 40, especially if the
+" terminal is fullscreen.
+if winwidth(0) > 80
+    let g:tagbar_width = 60
+endif
+
+" Don't let the CtrlP plugin map <C-P>
+let g:ctrlp_map=''
+
+let g:alternateExtensions_hpp = "cpp,cc,c"
+let g:alternateExtensions_cc = "hpp,h"
 
 " Use goimports to format imports idiomatically.
 let g:go_fmt_command = "goimports"
