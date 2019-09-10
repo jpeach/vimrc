@@ -36,6 +36,9 @@ Plug 'morhetz/gruvbox'
 " https://github.com/vim-airline/vim-airline
 Plug 'vim-airline/vim-airline'
 
+" https://github.com/vim-airline/vim-airline-themes
+Plug 'vim-airline/vim-airline-themes'
+
 " https://github.com/ctrlpvim/ctrlp.vim
 Plug 'ctrlpvim/ctrlp.vim'
 
