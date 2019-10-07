@@ -26,3 +26,7 @@ export GOPATH=$HOME/go
 
 PATH="${GOPATH}/bin${PATH:+:${PATH}}"
 PATH="${HOME}/bin${PATH:+:${PATH}}"
+
+# kubectx default fzf support changes the "show current context"
+# usage into "interactively select context" :(
+export KUBECTX_IGNORE_FZF=Y
