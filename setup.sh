@@ -62,8 +62,6 @@ VIMRC=${VIMRC##$HOMEDIR/}
     # If it's an old directory, save it.
     [[ -d ~/.vim ]] && mv ~/.vim ~/.vim.old
 
-    ls -l ~/.vim
-
     linkit $VIMRC/tmux.conf ~/.tmux.conf
     linkit $VIMRC/vimrc ~/.vimrc
     linkit $VIMRC ~/.vim
@@ -95,4 +93,21 @@ if command -v dnf > /dev/null ; then
         ack \
         global \
         vim-enhanced
+fi
+
+# Install macOS basics.
+if command -v brew > /dev/null ; then
+    brew install \
+        ack \
+        bash \
+        bash-completion \
+        curl \
+        direnv \
+        fzf \
+        git \
+        jq \
+        kubectx \
+        kubernetes-cli \
+        macvim \
+        rsync
 fi
