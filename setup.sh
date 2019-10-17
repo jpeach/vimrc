@@ -41,6 +41,33 @@ linkit()
     esac
 }
 
+# Install a muxer shell script that you can symlink commands to in
+# order to run them from a Homebrew install prefix. This is useful
+# for things that Homebrew refuses to link (like llvm and openssl).
+brew::prefix()
+{
+    local prefix="$1"
+
+    touch ~/bin/homebrew.$prefix
+    chmod 755  ~/bin/homebrew.$prefix
+
+    cat > ~/bin/homebrew.$prefix <<EOF
+#! /usr/bin/env bash
+
+readonly PROG=\$(basename \$0)
+readonly PREFIX=\$(brew --prefix ${prefix})
+
+case \$PROG in
+llvm-homebrew-exec)
+    echo homebrew.${prefix} runs a program from the ${prefix} Homebrew prefix
+    ;;
+*)
+    exec \${PREFIX}/bin/\${PROG}
+    ;;
+esac
+EOF
+}
+
 HOMEDIR=$(cd ~ && pwd)
 VIMRC=$(cd $(dirname $0) && pwd)
 
@@ -112,4 +139,10 @@ if command -v brew > /dev/null ; then
         kubernetes-cli \
         macvim \
         rsync
+fi
+
+# Install macOS prefix muxers.
+if command -v brew > /dev/null ; then
+    brew::prefix llvm
+    brew::prefix openssl
 fi
