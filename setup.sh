@@ -62,7 +62,7 @@ llvm-homebrew-exec)
     echo homebrew.${prefix} runs a program from the ${prefix} Homebrew prefix
     ;;
 *)
-    exec \${PREFIX}/bin/\${PROG}
+    exec \${PREFIX}/bin/\${PROG} "\$@"
     ;;
 esac
 EOF
