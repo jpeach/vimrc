@@ -3,7 +3,7 @@ if [ -f /etc/bashrc ]; then
     . /etc/bashrc
 fi
 
-if [ -f .aliases ]; then
+if [ -r .aliases ]; then
     . .aliases
 fi
 
