@@ -138,6 +138,7 @@ if command -v brew > /dev/null ; then
         kubectx \
         kubernetes-cli \
         macvim \
+        watch \
         rsync
 fi
 
