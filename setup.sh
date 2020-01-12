@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+readonly HERE=$(cd $(dirname $0) && pwd)
+
 error()
 {
     echo "$@"
@@ -65,6 +67,14 @@ llvm-homebrew-exec)
     exec \${PREFIX}/bin/\${PROG} "\$@"
     ;;
 esac
+EOF
+}
+
+# Install a bash profile.
+bash::profile() {
+    cat > ~/.bash_profile <<EOF
+source .bashrc
+source $HERE/completions.sh
 EOF
 }
 
@@ -147,3 +157,5 @@ if command -v brew > /dev/null ; then
     brew::prefix llvm
     brew::prefix openssl
 fi
+
+bash::profile

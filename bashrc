@@ -7,11 +7,6 @@ if [ -r .aliases ]; then
     . .aliases
 fi
 
-# Only for macOS. Fedora turns this on automatically via /etc/bashrc.
-if [ -r "/usr/local/etc/profile.d/bash_completion.sh" ] ; then
-    . "/usr/local/etc/profile.d/bash_completion.sh"
-fi
-
 if command -v direnv >/dev/null 2>&1 ; then
     eval "$(direnv hook bash)"
 fi
