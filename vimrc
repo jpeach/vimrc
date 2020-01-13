@@ -51,6 +51,9 @@ Plug 'mileszs/ack.vim'
 " https://github.com/nvie/vim-flake8
 Plug 'nvie/vim-flake8'
 
+" https://github.com/rust-lang/rust.vim
+Plug 'rust-lang/rust.vim'
+
 call plug#end()
 
 " Force the sensible plugin to run now so that we can override what it
