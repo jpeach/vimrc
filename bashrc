@@ -19,6 +19,11 @@ shopt -s histappend
 export TERM=xterm-256color
 export GOPATH=$HOME/go
 
+# Add rustup install directory if it exists.
+if [ -d "$HOME/.cargo/bin" ]; then
+    PATH="${HOME}/.cargo/bin${PATH:+:${PATH}}"
+fi
+
 # Add Homebrew compat paths on macOS.
 # https://discourse.brew.sh/t/why-was-with-default-names-removed/4405
 for p in $(brew --prefix)/opt/*/libexec/gnubin ; do
