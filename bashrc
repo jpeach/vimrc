@@ -19,6 +19,12 @@ shopt -s histappend
 export TERM=xterm-256color
 export GOPATH=$HOME/go
 
+# Add Homebrew compat paths on macOS.
+# https://discourse.brew.sh/t/why-was-with-default-names-removed/4405
+for p in $(brew --prefix)/opt/*/libexec/gnubin ; do
+    PATH="${p}${PATH:+:${PATH}}"
+done
+
 PATH="${GOPATH}/bin${PATH:+:${PATH}}"
 PATH="${HOME}/bin${PATH:+:${PATH}}"
 
