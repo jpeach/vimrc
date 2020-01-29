@@ -140,8 +140,7 @@ autocmd BufNewFile,BufRead *.txt set tw=65
 autocmd BufNewFile,BufRead *.msg set tw=65
 
 " Turn off funky tabbing modes for makefiles
-autocmd BufNewFile,BufRead *[Mm]akefile* set sts=0 noet ts=8 sw=8
-autocmd BufNewFile,BufRead *.make set sts=0 noet ts=8 sw=8
+autocmd FileType make set sts=0 ts=8 sw=8 noet
 
 " Set 2-space indentation for YAML.
 autocmd FileType yaml set ts=2 sts=2 sw=2 et
