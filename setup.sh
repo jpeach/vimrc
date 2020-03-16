@@ -22,25 +22,38 @@ error()
     exit 1
 }
 
+brew::available() {
+    command -v brew > /dev/null 2>&1
+}
+
+ln::is_gnu() {
+    ln --version 2>&1 | grep -q "GNU coreutils"
+}
+
+os::is() {
+    local -r wanted="$1"
+
+    case $(uname -s) in
+    $1) return true ;;
+    *) return false ;;
+    esac
+}
+
 linkit()
 {
-    case $(uname -s) in
-    Darwin)
+    if ln::is_gnu || os::is "Linux" ; then
+        # -n treat LINK_NAME  as a normal file if it
+        #    is a symbolic link to a directory
+        ln -snfv $1 $2
+    elif os::is "Darwin"; then
         # -s symbolic
         # -h don't follow target symlinks
         # -f overwrite target
         # -v verbose
         ln -shfv $1 $2
-        ;;
-    Linux)
-        # -n treat LINK_NAME  as a normal file if it
-        #    is a symbolic link to a directory
-        ln -snfv $1 $2
-        ;;
-    *)
+    else
         ln -sfv $1 $2
-        ;;
-    esac
+    fi
 }
 
 # Install a muxer shell script that you can symlink commands to in
@@ -135,7 +148,7 @@ if command -v dnf > /dev/null ; then
 fi
 
 # Install macOS basics.
-if command -v brew > /dev/null ; then
+if brew::available ; then
     brew install \
         ack \
         bash \
@@ -153,7 +166,7 @@ if command -v brew > /dev/null ; then
 fi
 
 # Install macOS prefix muxers.
-if command -v brew > /dev/null ; then
+if brew::available ; then
     brew::prefix llvm
     brew::prefix openssl
 fi
