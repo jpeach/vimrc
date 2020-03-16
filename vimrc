@@ -328,12 +328,20 @@ let g:alternateExtensions_hpp = "cpp,cc,c"
 let g:alternateExtensions_cc = "hpp,h"
 
 " Use goimports to format imports idiomatically.
-let g:go_fmt_command = "goimports"
+let g:go_fmt_command = 'goimports'
+
+let g:go_fmt_options = {
+   \ 'gofmt': '-s',
+   \ }
+
 
 " Enable more syntax highlights.
 let g:go_highlight_types = 1
 let g:go_highlight_functions = 1
 let g:go_highlight_methods = 1
+
+" Use golanci for metalinter.
+let g:go_metalinter_command = 'golangci-lint'
 
 " Run vet, lint, etc on save. This picks up a reasonable amount of issues.
 let g:go_metalinter_autosave = 1
@@ -345,13 +353,11 @@ let g:go_auto_sameids = 1
 " error under cursor) works
 let g:go_list_type = "quickfix""
 
-" Use golanci for metalinter.
-let g:go_metalinter_command = 'golangci-lint'
-
 let g:go_def_mode = 'gopls'
 let g:go_info_mode = 'gopls'
 
+" Show the type info (|:GoInfo|) for the word under the cursor automatically.
+let g:go_auto_type_info = 1
+
 " Autoformat rust code on save.
 let g:rustfmt_autosave = 1
-
-let g:go_auto_type_info = 1
