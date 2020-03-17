@@ -1,7 +1,0 @@
-[push]
-        default = simple
-[user]
-        name = James Peach
-	email = jpeach@apache.org
-[diff]
-	noprefix = true

@@ -91,6 +91,14 @@ source $HERE/completions.sh
 EOF
 }
 
+# Set a git global config item
+git::config() {
+    local -r key="$1"
+    local -r value="$2"
+
+    git config --global "$key" "$value"
+}
+
 HOMEDIR=$(cd ~ && pwd)
 VIMRC=$(cd $(dirname $0) && pwd)
 
@@ -112,14 +120,15 @@ VIMRC=${VIMRC##$HOMEDIR/}
     # If it's an old directory, save it.
     [[ -d ~/.vim ]] && mv ~/.vim ~/.vim.old
 
+    # .gitconfig isn't a symlink anymore, we just write it out.
+    [[ -L ~/.gitconfig ]] && rm ~/.gitconfig
+
     linkit $VIMRC/tmux.conf ~/.tmux.conf
     linkit $VIMRC/vimrc ~/.vimrc
     linkit $VIMRC ~/.vim
 
     linkit $VIMRC/aliases ~/.aliases
     linkit $VIMRC/bashrc ~/.bashrc
-
-    linkit $VIMRC/gitconfig ~/.gitconfig
 
     # Make this an absolute symlink.
     linkit $(pwd)/$VIMRC/tmux-cc ~/bin/tmux-cc
@@ -172,3 +181,10 @@ if brew::available ; then
 fi
 
 bash::profile
+
+# Update global git defaults
+git::config push.default    simple
+git::config user.name       "James Peach"
+git::config user.email      jpeach@apache.org
+git::config diff.noprefix   true
+git::config rerere.enabled  true # https://git-scm.com/book/en/v2/Git-Tools-Rerere
