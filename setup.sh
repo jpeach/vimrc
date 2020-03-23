@@ -62,18 +62,19 @@ linkit()
 brew::prefix()
 {
     local prefix="$1"
+    local progname=".homebrew.$prefix"
 
-    touch ~/bin/homebrew.$prefix
-    chmod 755  ~/bin/homebrew.$prefix
+    touch ~/bin/"$progname"
+    chmod 755  ~/bin/"$progname"
 
-    cat > ~/bin/homebrew.$prefix <<EOF
+    cat > ~/bin/"$progname" <<EOF
 #! /usr/bin/env bash
 
 readonly PROG=\$(basename \$0)
 readonly PREFIX=\$(brew --prefix ${prefix})
 
 case \$PROG in
-llvm-homebrew-exec)
+$progname)
     echo homebrew.${prefix} runs a program from the ${prefix} Homebrew prefix
     ;;
 *)
@@ -178,6 +179,16 @@ fi
 if brew::available ; then
     brew::prefix llvm
     brew::prefix openssl
+    brew::prefix curl
+
+    linkit .homebrew.curl $HOME/bin/curl
+    linkit .homebrew.openssl $HOME/bin/openssl
+
+    linkit .homebrew.llvm $HOME/bin/clangd
+    linkit .homebrew.llvm $HOME/bin/clang-format
+    linkit .homebrew.llvm $HOME/bin/clang-query
+    linkit .homebrew.llvm $HOME/bin/clang-tidy
+
 fi
 
 bash::profile
