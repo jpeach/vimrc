@@ -19,6 +19,8 @@ shopt -s histappend
 export TERM=xterm-256color
 export GOPATH=$HOME/go
 
+export GIT_EDITOR=vim
+
 # Add rustup install directory if it exists.
 if [ -d "$HOME/.cargo/bin" ]; then
     PATH="${HOME}/.cargo/bin${PATH:+:${PATH}}"
