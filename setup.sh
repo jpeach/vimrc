@@ -199,3 +199,4 @@ git::config user.name       "James Peach"
 git::config user.email      jpeach@apache.org
 git::config diff.noprefix   true
 git::config rerere.enabled  true # https://git-scm.com/book/en/v2/Git-Tools-Rerere
+git::config grep.extendedRegexp true
