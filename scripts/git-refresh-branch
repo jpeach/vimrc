@@ -2,13 +2,16 @@
 
 # Refresh the current branch against the working copy of master.
 
-GIT=${GIT:-git}
+set -o errexit
+set -o nounset
+set -o pipefail
 
-CURRENT=$(${GIT} rev-parse --abbrev-ref HEAD)
+readonly GIT=${GIT:-git}
+readonly CURRENT=$(${GIT} rev-parse --abbrev-ref HEAD)
 
 ## TODO(jpeach): automatically figure out which branch we are
 # rebasing onto.
-BASE=${BASE:-master}
+readonly BASE=${BASE:-master}
 
 ${GIT} checkout ${BASE}
 ${GIT} pull
