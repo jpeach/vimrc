@@ -87,7 +87,7 @@ EOF
 # Install a bash profile.
 bash::profile() {
     cat > ~/.bash_profile <<EOF
-source .bashrc
+source ~/.bashrc
 source $HERE/completions.sh
 EOF
 }

@@ -6,7 +6,7 @@ if [ -r "/usr/local/etc/profile.d/bash_completion.sh" ] ; then
 fi
 
 if command -v kubectl >/dev/null 2>&1 ; then
-    source <(k completion bash)
+    source <(kubectl completion bash)
     complete -o default -F __start_kubectl k
 fi
 

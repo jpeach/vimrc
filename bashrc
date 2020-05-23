@@ -3,8 +3,8 @@ if [ -f /etc/bashrc ]; then
     . /etc/bashrc
 fi
 
-if [ -r .aliases ]; then
-    . .aliases
+if [ -r ~/.aliases ]; then
+    . ~/.aliases
 fi
 
 if command -v direnv >/dev/null 2>&1 ; then
