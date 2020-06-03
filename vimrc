@@ -178,16 +178,13 @@ function! s:position()
 endfunction
 
 " Initialize cscope-lsp, see https://github.com/jpeach/cscope-lsp
-function! s:cscope_lsp_init()
+function! s:cscope_lsp_init(lsp)
+    " Name of the DB file for cscope add. vim requires that this be a
+    " regular file that exists.
+    let l:db = 'compile_commands.json'
 
     execute ':set cscopeprg=' . exepath('cscope-lsp')
-
-    " Pick an arbitrary file to placehold for the cscope index.
-    for t in ['.cquery', 'compile_commands.json']
-        if filereadable(t)
-            execute ':cs add ' . t
-        endif
-    endfor
+    execute ':cs add ' . l:db . ' . ' . ' --cquery=' . exepath(a:lsp)
 
     " css: Find symbol
     map <Leader>cs :cs find s <C-R>=<SID>position()<CR><CR>
@@ -262,7 +259,9 @@ function! CscopeInit()
     let l:gtags = filereadable('GTAGS')
 
     if executable('cscope-lsp') && executable('cquery') && l:cquery
-        call s:cscope_lsp_init()
+        call s:cscope_lsp_init("cquery")
+    elseif executable('cscope-lsp') && executable('ccls') && l:cquery
+        call s:cscope_lsp_init("ccls")
     elseif executable('gtags-cscope') && l:gtags
         call s:cscope_gtags_init()
     endif
