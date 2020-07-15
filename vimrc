@@ -105,24 +105,24 @@ syntax on
 if isdirectory('/usr/local/opt/fzf/plugin')
     set runtimepath+=/usr/local/opt/fzf
     " Map ,t to fuzzy find
-    map <Leader>t :FZF<CR>
+    noremap <Leader>t :FZF<CR>
 " Check for the Fedora install of fzf.
 elseif  isdirectory('/usr/share/vim/vimfiles/plugin')
     set runtimepath+=/usr/share/vim/vimfiles
     " Map ,t to fuzzy find
-    map <Leader>t :FZF<CR>
+    noremap <Leader>t :FZF<CR>
 else
     " CtrlP - fuzzy file finder; http://kien.github.io/ctrlp.vim/
     " Map ,t to Most Recently Used file find
-    map <Leader>t :CtrlP<CR>
+    noremap <Leader>t :CtrlP<CR>
     " Map ,b to buffer find
-    map <Leader>b :CtrlPBuffer<CR>
+    noremap <Leader>b :CtrlPBuffer<CR>
 endif
 
 " Key bindings
-map <C-A> :b#<CR>
-map <C-N> :bn<CR>
-map <C-P> :bp<CR>
+noremap <C-A> :b#<CR>
+noremap <C-N> :bn<CR>
+noremap <C-P> :bp<CR>
 
 " Make regex special characters special by default (see :help pattern).
 noremap / /\v
@@ -132,7 +132,7 @@ filetype plugin indent on
 
 " Load a decent man page viewer
 runtime ftplugin/man.vim
-map K :Man <C-R>=expand("<cword>")<CR><CR>
+noremap K :Man <C-R>=expand("<cword>")<CR><CR>
 
 " special handling for different file types
 autocmd BufNewFile,BufRead *.log set tw=65
@@ -146,7 +146,7 @@ autocmd FileType make set sts=0 ts=8 sw=8 noet
 autocmd FileType yaml set ts=2 sts=2 sw=2 et
 
 " Map ,8 to the flake8 command in python mode
-autocmd FileType python map <buffer> <Leader>8 :call Flake8()<CR>
+autocmd FileType python noremap <buffer> <Leader>8 :call Flake8()<CR>
 
 " Turn on C indentation.
 set cindent
@@ -160,17 +160,17 @@ set cinoptions=:0
 " ignore case (ic) unless you are searching for both upper and
 " lowercase letters (scs).
 set hlsearch is ic scs
-map <CR> :nohlsearch<CR>
+noremap <CR> :nohlsearch<CR>
 
 " Map <Leader>a to do an Ack search of the current word
-map <Leader>a :Ack <C-R>=expand("<cword>")<CR><CR>
+noremap <Leader>a :Ack <C-R>=expand("<cword>")<CR><CR>
 " Map ,s to git-stripspace the current buffer
-map <Leader>s :%!git stripspace<CR>
+noremap <Leader>s :%!git stripspace<CR>
 " Map ,j to use jq to format the current buffer
-map <Leader>j :%!jq .<CR>
+noremap <Leader>j :%!jq .<CR>
 
 " Map ,T to toggle the tagbar plugin.
-map <Leader>T :TagbarToggle<CR>
+noremap <Leader>T :TagbarToggle<CR>
 
 " Return the current cursor position as "file:line:col"
 function! s:position()
@@ -187,21 +187,21 @@ function! s:cscope_lsp_init(lsp)
     execute ':cs add ' . l:db . ' . ' . ' --cquery=' . exepath(a:lsp)
 
     " css: Find symbol
-    map <Leader>cs :cs find s <C-R>=<SID>position()<CR><CR>
+    noremap <Leader>cs :cs find s <C-R>=<SID>position()<CR><CR>
     " csg: Find definition
-    map <Leader>cg :cs find g <C-R>=<SID>position()<CR><CR>
+    noremap <Leader>cg :cs find g <C-R>=<SID>position()<CR><CR>
     " csc: Find callers
-    map <Leader>cc :cs find c <C-R>=<SID>position()<CR><CR>
+    noremap <Leader>cc :cs find c <C-R>=<SID>position()<CR><CR>
     " csd: Find callees
-    map <Leader>cd :cs find d <C-R>=<SID>position()<CR><CR>
+    noremap <Leader>cd :cs find d <C-R>=<SID>position()<CR><CR>
     " cst: Find text string
-    map <Leader>ct :cs find t <C-R>=<SID>position()<CR><CR>
+    noremap <Leader>ct :cs find t <C-R>=<SID>position()<CR><CR>
     " cse: Find egrep pattern
-    map <Leader>ce :cs find e <C-R>=<SID>position()<CR><CR>
+    noremap <Leader>ce :cs find e <C-R>=<SID>position()<CR><CR>
     " csf: Find file
-    map <Leader>cf :cs find f <C-R>=<SID>position()<CR><CR>
+    noremap <Leader>cf :cs find f <C-R>=<SID>position()<CR><CR>
     " csi: Find files #including this
-    map <Leader>ci :cs find i <C-R>=<SID>position()<CR><CR>
+    noremap <Leader>ci :cs find i <C-R>=<SID>position()<CR><CR>
 
 endfunction
 
@@ -212,34 +212,34 @@ function! s:cscope_gtags_init()
     execute ":cs add GTAGS"
 
     " css: Find symbol
-    map <Leader>cs :cs find s <C-R>=expand("<cword>")<CR><CR>
+    noremap <Leader>cs :cs find s <C-R>=expand("<cword>")<CR><CR>
     " csg: Find definition
-    map <Leader>cg :cs find g <C-R>=expand("<cword>")<CR><CR>
+    noremap <Leader>cg :cs find g <C-R>=expand("<cword>")<CR><CR>
     " csc: Find callers
-    map <Leader>cc :cs find c <C-R>=expand("<cword>")<CR><CR>
+    noremap <Leader>cc :cs find c <C-R>=expand("<cword>")<CR><CR>
     " csd: Find callees
-    map <Leader>cd :cs find d <C-R>=expand("<cword>")<CR><CR>
+    noremap <Leader>cd :cs find d <C-R>=expand("<cword>")<CR><CR>
     " cst: Find text string
-    map <Leader>ct :cs find t <C-R>=expand("<cword>")<CR><CR>
+    noremap <Leader>ct :cs find t <C-R>=expand("<cword>")<CR><CR>
     " cse: Find egrep pattern
-    map <Leader>ce :cs find e <C-R>=expand("<cword>")<CR><CR>
+    noremap <Leader>ce :cs find e <C-R>=expand("<cword>")<CR><CR>
     " csf: Find file
-    map <Leader>cf :cs find f <C-R>=expand("<cfile>")<CR><CR>
+    noremap <Leader>cf :cs find f <C-R>=expand("<cfile>")<CR><CR>
     " csi: Find files #including this
-    map <Leader>ci :cs find i <C-R>=expand("<cfile>")<CR><CR>
+    noremap <Leader>ci :cs find i <C-R>=expand("<cfile>")<CR><CR>
 
 endfunction
 
 " Initialize cscope keybindings for Go using vim-go.
 function! s:cscope_go_init()
     " css: Find symbol
-    map <Leader>cs :GoReferrers<CR><CR>
+    noremap <Leader>cs :GoReferrers<CR><CR>
     " csg: Find definition
-    map <Leader>cg :GoDef<CR><CR>
+    noremap <Leader>cg :GoDef<CR><CR>
     " csc: Find callers
-    map <Leader>cc :GoCallers<CR><CR>
+    noremap <Leader>cc :GoCallers<CR><CR>
     " csd: Find callees
-    map <Leader>cd :GoCallees<CR><CR>
+    noremap <Leader>cd :GoCallees<CR><CR>
     " cst: Find text string
     " cse: Find egrep pattern
     " csf: Find file
