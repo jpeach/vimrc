@@ -40,3 +40,9 @@ PATH="${HOME}/bin${PATH:+:${PATH}}"
 # kubectx default fzf support changes the "show current context"
 # usage into "interactively select context" :(
 export KUBECTX_IGNORE_FZF=Y
+
+# Ugh. Set up google cloud SDK if the homebrew cask is there.
+if [ -r "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc" ]; then
+    export CLOUDSDK_PYTHON="/usr/local/opt/python@3.8/libexec/bin/python"
+    source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc"
+fi
