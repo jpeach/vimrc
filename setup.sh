@@ -144,17 +144,22 @@ VIMRC=${VIMRC##$HOMEDIR/}
     fi
 )
 
-# Update vim-plug.
-curl --silent --fail --location --create-dirs \
-    --output ~/.vim/autoload/plug.vim \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
-
 # Install some basic Fedora packages.
 if command -v dnf > /dev/null ; then
     sudo dnf install -y \
+        curl \
         ack \
         global \
         vim-enhanced
+fi
+
+# Install some basic Debian packages.
+if command -v apt > /dev/null ; then
+    sudo apt install -y \
+        curl \
+        ack \
+        global \
+        vim
 fi
 
 # Install macOS basics.
@@ -190,6 +195,11 @@ if brew::available ; then
     linkit .homebrew.llvm $HOME/bin/clang-tidy
 
 fi
+
+# Update vim-plug.
+curl --silent --fail --location --create-dirs \
+    --output ~/.vim/autoload/plug.vim \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 bash::profile
 
