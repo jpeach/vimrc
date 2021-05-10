@@ -1,0 +1,19 @@
+#! /usr/bin/env bash
+
+set -e # exit on error
+
+readonly PREFIX=$HOME/inst/bazelisk
+
+mkdir -p "$PREFIX"
+
+curl \
+    --location \
+    --progress-bar \
+    --output $PREFIX/bazelisk \
+    https://github.com/bazelbuild/bazelisk/releases/latest/download/bazelisk-$(uname -s | tr A-Z a-z)-amd64
+
+chmod +x $PREFIX/bazelisk \
+
+for prg in $(find $PREFIX -type f) ; do
+    ln -sf $prg $HOME/bin/$(basename $prg)
+done
