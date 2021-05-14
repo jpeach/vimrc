@@ -149,8 +149,9 @@ VIMRC=${VIMRC##$HOMEDIR/}
 # Install some basic Fedora packages.
 if command -v dnf > /dev/null ; then
     sudo dnf install -y \
-        curl \
         ack \
+        curl \
+        direnv \
         global \
         vim-enhanced
 fi
@@ -158,8 +159,9 @@ fi
 # Install some basic Debian packages.
 if command -v apt > /dev/null ; then
     sudo apt install -y \
-        curl \
         ack \
+        curl \
+        direnv \
         global \
         vim
 fi
@@ -201,12 +203,12 @@ fi
 case "$ID" in
 ubuntu)
     for url in \
-	https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
-	https://zoom.us/client/latest/zoom_amd64.deb
+        https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
+        https://zoom.us/client/latest/zoom_amd64.deb
     do
-	debfile=/tmp/$(basename "$url" .deb)-$$.deb
-	curl --location --progress-bar -o $debfile "$url"
-	sudo apt install -y $debfile
+        debfile=/tmp/$(basename "$url" .deb)-$$.deb
+        curl --location --progress-bar -o $debfile "$url"
+        sudo apt install -y $debfile
     done
     ;;
 esac
