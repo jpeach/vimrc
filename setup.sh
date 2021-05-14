@@ -1,6 +1,6 @@
 #! /bin/bash
 
-# Copyright 2019 James Peach
+# Copyright 2021 James Peach
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,6 +15,8 @@
 # limitations under the License.
 
 readonly HERE=$(cd $(dirname $0) && pwd)
+
+. /etc/os-release || true
 
 error()
 {
@@ -195,6 +197,19 @@ if brew::available ; then
     linkit .homebrew.llvm $HOME/bin/clang-tidy
 
 fi
+
+case "$ID" in
+ubuntu)
+    for url in \
+	https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb \
+	https://zoom.us/client/latest/zoom_amd64.deb
+    do
+	debfile=/tmp/$(basename "$url" .deb)-$$.deb
+	curl --location --progress-bar -o $debfile "$url"
+	sudo apt install -y $debfile
+    done
+    ;;
+esac
 
 # Update vim-plug.
 curl --silent --fail --location --create-dirs \
