@@ -130,6 +130,9 @@ VIMRC=${VIMRC##$HOMEDIR/}
     linkit $VIMRC/vimrc ~/.vimrc
     linkit $VIMRC ~/.vim
 
+    mkdir -p ~/.config
+    linkit ../$VIMRC ~/.config/nvim
+
     linkit $VIMRC/aliases ~/.aliases
     linkit $VIMRC/bashrc ~/.bashrc
 
