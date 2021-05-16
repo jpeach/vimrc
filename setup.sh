@@ -163,10 +163,17 @@ fi
 if command -v apt > /dev/null ; then
     sudo apt install -y \
         ack \
+        bash-completion \
         curl \
         direnv \
+        fzf \
+        git \
         global \
-        vim
+        htop \
+        jq \
+        rsync \
+        vim \
+        watch
 fi
 
 # Install macOS basics.
