@@ -36,8 +36,8 @@ os::is() {
     local -r wanted="$1"
 
     case $(uname -s) in
-    $1) return true ;;
-    *) return false ;;
+    $1) return 0 ;;
+    *) return 1 ;;
     esac
 }
 
@@ -47,7 +47,7 @@ linkit()
         # -n treat LINK_NAME  as a normal file if it
         #    is a symbolic link to a directory
         ln -snfv $1 $2
-    elif os::is "Darwin"; then
+    elif os::is "Darwin" ; then
         # -s symbolic
         # -h don't follow target symlinks
         # -f overwrite target
@@ -170,37 +170,39 @@ if command -v apt > /dev/null ; then
 fi
 
 # Install macOS basics.
-if brew::available ; then
-    brew install \
-        ack \
-        bash \
-        bash-completion \
-        curl \
-        direnv \
-        fzf \
-        git \
-        jq \
-        kubectx \
-        kubernetes-cli \
-        macvim \
-        watch \
-        rsync
-fi
+if os::is "Darwin" ; then
+    if brew::available ; then
+        brew install \
+            ack \
+            bash \
+            bash-completion \
+            curl \
+            direnv \
+            fzf \
+            git \
+            jq \
+            kubectx \
+            kubernetes-cli \
+            macvim \
+            watch \
+            rsync
+    fi
 
-# Install macOS prefix muxers.
-if brew::available ; then
-    brew::prefix llvm
-    brew::prefix openssl
-    brew::prefix curl
+    # Install macOS prefix muxers.
+    if brew::available ; then
+        brew::prefix llvm
+        brew::prefix openssl
+        brew::prefix curl
 
-    linkit .homebrew.curl $HOME/bin/curl
-    linkit .homebrew.openssl $HOME/bin/openssl
+        linkit .homebrew.curl $HOME/bin/curl
+        linkit .homebrew.openssl $HOME/bin/openssl
 
-    linkit .homebrew.llvm $HOME/bin/clangd
-    linkit .homebrew.llvm $HOME/bin/clang-format
-    linkit .homebrew.llvm $HOME/bin/clang-query
-    linkit .homebrew.llvm $HOME/bin/clang-tidy
+        linkit .homebrew.llvm $HOME/bin/clangd
+        linkit .homebrew.llvm $HOME/bin/clang-format
+        linkit .homebrew.llvm $HOME/bin/clang-query
+        linkit .homebrew.llvm $HOME/bin/clang-tidy
 
+    fi
 fi
 
 case "$ID" in
