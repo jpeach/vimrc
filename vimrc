@@ -201,45 +201,42 @@ function! s:cscope_lsp_init(lsp)
     " csf: Find file
     noremap <Leader>cf :cs find f <C-R>=<SID>position()<CR><CR>
     " csi: Find files #including this
-    noremap <Leader>ci :cs find i <C-R>=<SID>position()<CR><CR>
-
+    nnoremap <Leader>ci :cs find i <C-R>=<SID>position()<CR><CR>
 endfunction
 
 " Initialize gtags-cscope.
 function! s:cscope_gtags_init()
-
     execute ':set cscopeprg=' . exepath('gtags-cscope')
     execute ":cs add GTAGS"
 
     " css: Find symbol
-    noremap <Leader>cs :cs find s <C-R>=expand("<cword>")<CR><CR>
+    nnoremap <Leader>cs :cs find s <C-R>=expand("<cword>")<CR><CR>
     " csg: Find definition
-    noremap <Leader>cg :cs find g <C-R>=expand("<cword>")<CR><CR>
+    nnoremap <Leader>cg :cs find g <C-R>=expand("<cword>")<CR><CR>
     " csc: Find callers
-    noremap <Leader>cc :cs find c <C-R>=expand("<cword>")<CR><CR>
+    nnoremap <Leader>cc :cs find c <C-R>=expand("<cword>")<CR><CR>
     " csd: Find callees
-    noremap <Leader>cd :cs find d <C-R>=expand("<cword>")<CR><CR>
+    nnoremap <Leader>cd :cs find d <C-R>=expand("<cword>")<CR><CR>
     " cst: Find text string
-    noremap <Leader>ct :cs find t <C-R>=expand("<cword>")<CR><CR>
+    nnoremap <Leader>ct :cs find t <C-R>=expand("<cword>")<CR><CR>
     " cse: Find egrep pattern
-    noremap <Leader>ce :cs find e <C-R>=expand("<cword>")<CR><CR>
+    nnoremap <Leader>ce :cs find e <C-R>=expand("<cword>")<CR><CR>
     " csf: Find file
-    noremap <Leader>cf :cs find f <C-R>=expand("<cfile>")<CR><CR>
+    nnoremap <Leader>cf :cs find f <C-R>=expand("<cfile>")<CR><CR>
     " csi: Find files #including this
-    noremap <Leader>ci :cs find i <C-R>=expand("<cfile>")<CR><CR>
-
+    nnoremap <Leader>ci :cs find i <C-R>=expand("<cfile>")<CR><CR>
 endfunction
 
 " Initialize cscope keybindings for Go using vim-go.
 function! s:cscope_go_init()
     " css: Find symbol
-    noremap <Leader>cs :GoReferrers<CR><CR>
+    nnoremap <Leader>cs :GoReferrers<CR><CR>
     " csg: Find definition
-    noremap <Leader>cg :GoDef<CR><CR>
+    nnoremap <Leader>cg :GoDef<CR><CR>
     " csc: Find callers
-    noremap <Leader>cc :GoCallers<CR><CR>
+    nnoremap <Leader>cc :GoCallers<CR><CR>
     " csd: Find callees
-    noremap <Leader>cd :GoCallees<CR><CR>
+    nnoremap <Leader>cd :GoCallees<CR><CR>
     " cst: Find text string
     " cse: Find egrep pattern
     " csf: Find file
