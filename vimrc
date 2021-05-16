@@ -296,7 +296,10 @@ set termguicolors
 " All my terminals are dark these days. I wonder how I could autodetect this?
 set background=dark
 
-colorscheme gruvbox
+" The default neovim colorscheme is nicer than gruvbox.
+if !has('nvim')
+    colorscheme gruvbox
+endif
 
 set number
 set relativenumber
