@@ -166,6 +166,7 @@ if command -v apt > /dev/null ; then
         bash-completion \
         curl \
         direnv \
+        exuberant-ctags \
         fzf \
         git \
         global \

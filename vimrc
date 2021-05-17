@@ -1,4 +1,4 @@
-" Copyright 2010-2016 James Peach
+" Copyright 2010-2021 James Peach
 "
 " Licensed under the Apache License, Version 2.0 (the "License");
 " you may not use this file except in compliance with the License.
@@ -53,6 +53,11 @@ Plug 'nvie/vim-flake8'
 
 " https://github.com/rust-lang/rust.vim
 Plug 'rust-lang/rust.vim'
+
+" https://github.com/neovim/nvim-lspconfig
+if has('nvim')
+    Plug 'neovim/nvim-lspconfig'
+endif
 
 call plug#end()
 
@@ -243,6 +248,31 @@ function! s:cscope_go_init()
     " csi: Find files #including this
 endfunction
 
+" Initialize neovim LSP, see https://github.com/neovim/nvim-lspconfig.
+function! s:nvim_lsp_init()
+    if !has('nvim')
+        return
+    endif
+
+    lua <<EOF
+local lspconfig = require('lspconfig')
+lspconfig.clangd.setup {}
+EOF
+
+    " ,cc: Find callers
+    nnoremap <Leader>cc :lua vim.lsp.buf.incoming_calls()<CR>
+    " ,cd: Find callees
+    nnoremap <Leader>cd :lua vim.lsp.buf.outgoing_calls()<CR>
+    " ,cs: Find symbol (references)
+    nnoremap <Leader>cs :lua vim.lsp.buf.references()<CR>
+    " ,cg: Find definition
+    nnoremap <Leader>cg :lua vim.lsp.buf.definition()<CR>
+    " ,ci: Find implementation
+    nnoremap <Leader>cg :lua vim.lsp.buf.implementation()<CR>
+    " ,ch: Switch to source header
+    nnoremap <Leader>ch :ClangdSwitchSourceHeader<CR>
+endfunction
+
 " Set up gtags (cscope) integration
 function! CscopeInit()
     if !has("cscope")
@@ -267,6 +297,9 @@ endfunction
 
 call CscopeInit()
 autocmd FileType go call s:cscope_go_init()
+
+" We can call this unconditionally because it's a noop outside of neovim.
+call s:nvim_lsp_init()
 
 " Highlight trailing whitespace.
 if has("syntax") && (&t_Co > 2 || has("gui_running"))
@@ -332,7 +365,6 @@ let g:go_fmt_command = 'goimports'
 let g:go_fmt_options = {
    \ 'gofmt': '-s',
    \ }
-
 
 " Enable more syntax highlights.
 let g:go_highlight_types = 1
