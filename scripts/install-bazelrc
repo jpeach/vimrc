@@ -1,0 +1,23 @@
+#! /usr/bin/env bash
+
+set -o errexit
+set -o pipefail
+set -o nounset
+
+readonly NCPU=$(getconf _NPROCESSORS_CONF)
+readonly JOBS=$(( $NCPU > 2 ? $NCPU - 2 : 2 ))
+
+cat > ~/.bazelrc <<EOF
+build --jobs $JOBS
+build --local_ram_resources=HOST_RAM*0.75
+build --verbose_failures
+
+startup --batch_cpu_scheduling
+startup --io_nice_level 7
+
+test --compilation_mode=dbg
+test --jobs $JOBS
+test --local_ram_resources=HOST_RAM*0.75
+test --verbose_failures
+EOF
+
