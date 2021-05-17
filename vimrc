@@ -268,7 +268,7 @@ EOF
     " ,cg: Find definition
     nnoremap <Leader>cg :lua vim.lsp.buf.definition()<CR>
     " ,ci: Find implementation
-    nnoremap <Leader>cg :lua vim.lsp.buf.implementation()<CR>
+    nnoremap <Leader>ci :lua vim.lsp.buf.implementation()<CR>
     " ,ch: Switch to source header
     nnoremap <Leader>ch :ClangdSwitchSourceHeader<CR>
 endfunction
