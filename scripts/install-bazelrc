@@ -10,14 +10,22 @@ readonly JOBS=$(( $NCPU > 2 ? $NCPU - 2 : 2 ))
 cat > ~/.bazelrc <<EOF
 build --jobs $JOBS
 build --local_ram_resources=HOST_RAM*0.75
+build --repository_cache=~/.cache/bazel/repo
+build --disk_cache=~/.cache/bazel/disk
 build --verbose_failures
+
+fetch --repository_cache=~/.cache/bazel/repo
+
+query --repository_cache=~/.cache/bazel/repo
 
 startup --batch_cpu_scheduling
 startup --io_nice_level 7
 
-test --compilation_mode=dbg
 test --jobs $JOBS
 test --local_ram_resources=HOST_RAM*0.75
+test --compilation_mode=dbg
+test --repository_cache=~/.cache/bazel/repo
 test --verbose_failures
+test --test_verbose_timeout_warnings
+test --test_output=errors
 EOF
-
