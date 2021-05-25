@@ -374,6 +374,8 @@ let g:go_highlight_methods = 1
 " Use golanci for metalinter.
 let g:go_metalinter_command = 'golangci-lint'
 
+let g:go_metalinter_autosave_enabled = ['vet', 'revive']
+
 " Run vet, lint, etc on save. This picks up a reasonable amount of issues.
 let g:go_metalinter_autosave = 1
 
