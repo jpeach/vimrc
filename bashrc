@@ -32,11 +32,15 @@ fi
 
 # Add Homebrew compat paths on macOS.
 # https://discourse.brew.sh/t/why-was-with-default-names-removed/4405
-if command -v brew > /dev/null 2>&1 ; then
-    for p in $(brew --prefix)/opt/*/libexec/gnubin ; do
-        PATH="${p}${PATH:+:${PATH}}"
-    done
-fi
+case $(uname -s) in
+    Darwin)
+        if command -v brew > /dev/null 2>&1 ; then
+            for p in $(brew --prefix)/opt/*/libexec/gnubin ; do
+                PATH="${p}${PATH:+:${PATH}}"
+            done
+        fi
+    ;;
+esac
 
 PATH="${GOPATH}/bin${PATH:+:${PATH}}"
 PATH="${HOME}/bin${PATH:+:${PATH}}"
