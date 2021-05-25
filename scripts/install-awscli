@@ -1,0 +1,24 @@
+#! /usr/bin/env bash
+
+set -o errexit
+
+readonly PREFIX=$HOME/inst/awscli
+readonly TEMPDIR=$(mktemp -d)
+
+mkdir -p "$PREFIX"
+
+curl \
+    --fail \
+    --location \
+    --progress-bar \
+    --output $TEMPDIR/awscli2.zip \
+    https://awscli.amazonaws.com/awscli-exe-$(uname -s | tr A-Z a-z)-$(uname -m).zip
+
+(
+    cd $TEMPDIR
+
+    unzip awscli2.zip
+
+    ./aws/install --update --install-dir $PREFIX --bin-dir $HOME/bin
+)
+
