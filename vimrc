@@ -242,10 +242,11 @@ function! s:cscope_go_init()
     nnoremap <Leader>cc :GoCallers<CR><CR>
     " csd: Find callees
     nnoremap <Leader>cd :GoCallees<CR><CR>
+    " ,ci: Find implementation
+    nnoremap <Leader>ci :GoImplements<CR><CR>
     " cst: Find text string
     " cse: Find egrep pattern
     " csf: Find file
-    " csi: Find files #including this
 endfunction
 
 " Initialize neovim LSP, see https://github.com/neovim/nvim-lspconfig.
