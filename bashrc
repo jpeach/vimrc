@@ -7,7 +7,9 @@ if [ -r ~/.aliases ]; then
     . ~/.aliases
 fi
 
-if [ -d /home/linuxbrew ]; then
+# If HOMEBREW_PREFIX is set we have already eval'ed this and doing it
+# again will just add it into $PATH again.
+if [ -d /home/linuxbrew -a -z "$HOMEBREW_PREFIX" ]; then
     eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
 fi
 
