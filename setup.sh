@@ -128,6 +128,7 @@ VIMRC=${VIMRC##$HOMEDIR/}
 
     linkit $VIMRC/tmux.conf ~/.tmux.conf
     linkit $VIMRC/vimrc ~/.vimrc
+    linkit $VIMRC/ideavimrc ~/.ideavimrc
     linkit $VIMRC ~/.vim
 
     mkdir -p ~/.config
