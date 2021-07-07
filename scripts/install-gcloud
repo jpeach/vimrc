@@ -1,0 +1,31 @@
+#! /usr/bin/env bash
+
+set -o errexit
+
+readonly PREFIX=$HOME/inst/awscli
+readonly TEMPDIR=$(mktemp -d)
+
+# See https://cloud.google.com/sdk/docs/install#deb
+install::ubuntu() {
+    sudo apt-get install -y apt-transport-https ca-certificates gnupg
+
+    if [ ! -f /etc/apt/sources.list.d/google-cloud-sdk.list ] ; then
+        echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | \
+            sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+    fi
+
+    if [ ! -f /usr/share/keyrings/cloud.google.gpg ]; then
+        curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | \
+            sudo apt-key --keyring /usr/share/keyrings/cloud.google.gpg add -
+    fi
+
+    sudo apt-get update && sudo apt-get install google-cloud-sdk
+}
+
+. /etc/os-release
+case $ID in
+ubuntu) install::ubuntu ;;
+*) echo "$0: no support for $ID";;
+esac
+
+
