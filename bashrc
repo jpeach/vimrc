@@ -28,7 +28,7 @@ export GOPATH=$HOME/go
 export GIT_EDITOR=vim
 
 # Add rustup install directory if it exists.
-if [ -d "$HOME/.cargo/bin" ]; then
+if [ -r "$HOME/.cargo/env" ]; then
     . "$HOME/.cargo/env"
 fi
 
