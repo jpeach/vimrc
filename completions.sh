@@ -15,6 +15,10 @@ if command -v kubectl >/dev/null 2>&1 ; then
     complete -o default -F __start_kubectl k
 fi
 
+if command -v gh >/dev/null 2>&1 ; then
+    source <(gh completion --shell bash)
+fi
+
 if [ -r /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc ]  ; then
     source /usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.bash.inc
 fi
