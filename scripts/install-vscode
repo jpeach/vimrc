@@ -1,0 +1,21 @@
+#! /usr/bin/env bash
+
+set -o errexit
+
+readonly TEMPDIR=$(mktemp -d)
+
+# See https://code.visualstudio.com/docs/setup/linux
+install::ubuntu() {
+    curl --fail --progress-bar --location -o ${TEMPDIR}/vscode.deb "https://go.microsoft.com/fwlink/?LinkID=760868"
+    sudo apt install -y ${TEMPDIR}/vscode.deb
+    sudo apt update
+    sudo apt install -y code
+}
+
+. /etc/os-release
+case $ID in
+ubuntu) install::ubuntu ;;
+*) echo "$0: no support for $ID";;
+esac
+
+
