@@ -2,7 +2,6 @@
 
 set -o errexit
 
-readonly PREFIX=$HOME/inst/awscli
 readonly TEMPDIR=$(mktemp -d)
 
 # See https://cloud.google.com/sdk/docs/install#deb
