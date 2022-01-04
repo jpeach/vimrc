@@ -242,3 +242,5 @@ git::config rerere.enabled  true # https://git-scm.com/book/en/v2/Git-Tools-Rere
 git::config grep.extendedRegexp true
 git::config pull.ff only
 git::config init.defaultBranch main
+git::config transfer.fsckObjects true
+git::config fetch.fsckObjects true
