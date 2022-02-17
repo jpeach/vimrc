@@ -136,6 +136,7 @@ VIMRC=${VIMRC##$HOMEDIR/}
 
     linkit $VIMRC/aliases ~/.aliases
     linkit $VIMRC/bashrc ~/.bashrc
+    linkit $VIMRC/zshrc ~/.zshrc
 
     # Make this an absolute symlink.
     linkit $(pwd)/$VIMRC/tmux-cc ~/bin/tmux-cc
@@ -161,21 +162,23 @@ if command -v dnf > /dev/null ; then
 fi
 
 # Install some basic Debian packages.
-if command -v apt > /dev/null ; then
-    sudo apt install -y \
-        ack \
-        bash-completion \
-        curl \
-        direnv \
-        exuberant-ctags \
-        fzf \
-        git \
-        global \
-        htop \
-        jq \
-        rsync \
-        vim \
-        watch
+if os::is 'Linux' ; then
+    if command -v apt > /dev/null ; then
+        sudo apt install -y \
+            ack \
+            bash-completion \
+            curl \
+            direnv \
+            exuberant-ctags \
+            fzf \
+            git \
+            global \
+            htop \
+            jq \
+            rsync \
+            vim \
+            watch
+    fi
 fi
 
 # Install macOS basics.
