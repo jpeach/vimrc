@@ -9,8 +9,12 @@ fi
 
 # If HOMEBREW_PREFIX is set we have already eval'ed this and doing it
 # again will just add it into $PATH again.
-if [ -d /home/linuxbrew -a -z "$HOMEBREW_PREFIX" ]; then
-    eval $(/home/linuxbrew/.linuxbrew/bin/brew shellenv)
+if [ -z "$HOMEBREW_PREFIX" ]; then
+    for d in /usr/local /opt/homebrew /home/linuxbrew/.linuxbrew ; do
+        if [ -x "${d}/bin/brew" ]; then
+            eval $("${d}/bin/brew" shellenv)
+        fi
+    done
 fi
 
 if command -v direnv >/dev/null 2>&1 ; then
