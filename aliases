@@ -2,4 +2,6 @@ alias ls="ls -F"
 alias kc=kubectx
 alias k=kubectl
 
+alias n=nvim
+
 alias gtags="gtags --skip-symlink"
