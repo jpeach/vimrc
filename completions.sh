@@ -1,13 +1,26 @@
 # This file sets up bash completions for various tooling.
 
-# Only for macOS. Fedora turns this on automatically via /etc/bashrc.
-if [ -r /usr/local/etc/profile.d/bash_completion.sh ] ; then
-    source /usr/local/etc/profile.d/bash_completion.sh
-# Same, but yanked from Ubuntu /etc/bash.bashrc.
-elif [ -r /usr/share/bash-completion/bash_completion ]; then
-    source /usr/share/bash-completion/bash_completion
-elif [ -r /etc/bash_completion ]; then
-    source /etc/bash_completion
+HOMEBREW_PREFIX=${HOMEBREW_PREFIX:-"$(brew --prefix)"}
+
+if [ -d "${HOMEBREW_PREFIX}" ]; then
+    # https://docs.brew.sh/Shell-Completion
+    if [ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ] ; then
+        source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
+    else
+        for COMPLETION in "${HOMEBREW_PREFIX}/etc/bash_completion.d/"* ; do
+            [[ -r "${COMPLETION}" ]] && source "${COMPLETION}"
+        done
+    fi
+else
+    # Only for macOS. Fedora turns this on automatically via /etc/bashrc.
+    if [ -r /usr/local/etc/profile.d/bash_completion.sh ] ; then
+        source /usr/local/etc/profile.d/bash_completion.sh
+    # Same, but yanked from Ubuntu /etc/bash.bashrc.
+    elif [ -r /usr/share/bash-completion/bash_completion ]; then
+        source /usr/share/bash-completion/bash_completion
+    elif [ -r /etc/bash_completion ]; then
+        source /etc/bash_completion
+    fi
 fi
 
 if command -v kubectl >/dev/null 2>&1 ; then
