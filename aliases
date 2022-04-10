@@ -3,5 +3,6 @@ alias kc=kubectx
 alias k=kubectl
 
 alias n=nvim
+alias e=nvim
 
 alias gtags="gtags --skip-symlink"
