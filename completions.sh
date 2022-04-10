@@ -1,6 +1,6 @@
 # This file sets up bash completions for various tooling.
 
-HOMEBREW_PREFIX=${HOMEBREW_PREFIX:-"$(brew --prefix)"}
+HOMEBREW_PREFIX=${HOMEBREW_PREFIX:-"$(brew --prefix 2>/dev/null)"}
 
 if [ -d "${HOMEBREW_PREFIX}" ]; then
     # https://docs.brew.sh/Shell-Completion
