@@ -16,7 +16,11 @@
 call plug#begin('~/.vim/bundle')
 
 " https://github.com/fatih/vim-go
-Plug 'fatih/vim-go', { 'tag': '*', 'do': ':GoUpdateBinaries' }
+"
+" Temporarily track master for Go 1.18 fixes. Should be able to revert
+" this when vim-go 1.26 releases.
+" Plug 'fatih/vim-go', { 'tag': '*', 'do': ':GoUpdateBinaries' }
+Plug 'fatih/vim-go', {'do': ':GoUpdateBinaries' }
 
 " https://github.com/junegunn/fzf.vim
 Plug 'junegunn/fzf.vim'
