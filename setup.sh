@@ -155,9 +155,14 @@ VIMRC=${VIMRC##$HOMEDIR/}
 if command -v dnf > /dev/null ; then
     sudo dnf install -y \
         ack \
+        bash-completion \
         curl \
         direnv \
         global \
+        htop \
+        jq \
+        neovim \
+        procps-ng \
         vim-enhanced
 fi
 
@@ -175,6 +180,7 @@ if os::is 'Linux' ; then
             global \
             htop \
             jq \
+            nvim \
             rsync \
             vim \
             watch
