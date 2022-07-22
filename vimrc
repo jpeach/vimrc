@@ -58,6 +58,9 @@ Plug 'nvie/vim-flake8'
 " https://github.com/rust-lang/rust.vim
 Plug 'rust-lang/rust.vim'
 
+" https://github.com/sheerun/vim-polyglot
+Plug 'sheerun/vim-polyglot'
+
 " https://github.com/neovim/nvim-lspconfig
 if has('nvim')
     Plug 'neovim/nvim-lspconfig'
