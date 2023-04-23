@@ -66,6 +66,9 @@ if has('nvim')
     Plug 'neovim/nvim-lspconfig'
 endif
 
+" https://github.com/editorconfig/editorconfig-vim
+Plug 'editorconfig/editorconfig-vim'
+
 call plug#end()
 
 " Force the sensible plugin to run now so that we can override what it
