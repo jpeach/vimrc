@@ -42,7 +42,15 @@ case $(uname -s) in
     Darwin)
         if command -v brew > /dev/null 2>&1 ; then
             for p in $(brew --prefix)/opt/*/libexec/gnubin ; do
-                PATH="${p}${PATH:+:${PATH}}"
+                case $p in
+                    # Skip libtool because some things want macOS libtool and
+                    # they are not even close to compatible.
+                    */libtool/*)
+                        ;;
+                    *)
+                        PATH="${p}${PATH:+:${PATH}}"
+                        ;;
+                esac
             done
         fi
     ;;
