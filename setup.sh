@@ -253,3 +253,12 @@ git::config pull.ff only
 git::config init.defaultBranch main
 git::config transfer.fsckObjects true
 git::config fetch.fsckObjects true
+
+if command -v nvim 2>&1 ; then
+    nvim \
+        -c PlugUpdate \
+        -c PlugInstall \
+        -c PlugUpgrade \
+        -c "CocInstall coc-json coc-tsserver coc-go coc-clangd" \
+        -c only -c quit
+fi
