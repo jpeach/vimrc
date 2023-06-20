@@ -68,3 +68,7 @@ if [ -r "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.
     export CLOUDSDK_PYTHON="/usr/local/opt/python@3.8/libexec/bin/python"
     source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc"
 fi
+
+# Fedora hooks this into PackageKit, which is generally a bit annoying.
+# https://unix.stackexchange.com/questions/544330/handle-command-not-found-without-packagekit
+unset -f command_not_found_handle
