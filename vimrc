@@ -68,7 +68,9 @@ endif
 Plug 'editorconfig/editorconfig-vim'
 
 " https://github.com/neoclide/coc.nvim
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+if has('nvim')
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
+endif
 
 call plug#end()
 
@@ -189,11 +191,13 @@ noremap <Leader>j :%!jq .<CR>
 " Map ,T to toggle the tagbar plugin.
 noremap <Leader>T :TagbarToggle<CR>
 
-source $HOME/.vim/init-cscope.vim
+"source $HOME/.vim/init-cscope.vim
+"
+"if has('nvim')
+"source $HOME/.vim/init-lspconfig.vim
+"endif
 
-if has('nvim')
-source $HOME/.vim/init-lspconfig.vim
-endif
+source $HOME/.vim/init-coc.vim
 
 " Highlight trailing whitespace.
 if has("syntax") && (&t_Co > 2 || has("gui_running"))
