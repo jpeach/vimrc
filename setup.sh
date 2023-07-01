@@ -259,6 +259,10 @@ if command -v nvim 2>&1 ; then
         -c PlugUpdate \
         -c PlugInstall \
         -c PlugUpgrade \
-        -c "CocInstall coc-json coc-tsserver coc-go coc-clangd" \
+        -c "CocInstall coc-json" \
+        -c "CocInstall coc-tsserver" \
+        -c "CocInstall coc-go " \
+        -c "CocInstall coc-clangd" \
+        -c "CocInstall coc-rust-analyzer" \
         -c only -c quit
 fi
