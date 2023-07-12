@@ -198,12 +198,13 @@ if os::is "Darwin" ; then
             direnv \
             fzf \
             git \
+            htop \
             jq \
             kubectx \
             kubernetes-cli \
-            macvim \
-            watch \
-            rsync
+            nvim \
+            rsync \
+            watch
     fi
 
     # Install macOS prefix muxers.
