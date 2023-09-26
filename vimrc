@@ -292,3 +292,19 @@ let g:go_auto_type_info = 1
 
 " Autoformat rust code on save.
 let g:rustfmt_autosave = 1
+
+" Disable showing the long message about mixed indents. We don't care, and it
+" takes up a lot of space.
+let g:airline#extensions#whitespace#show_message = 0
+
+" Ignore the common case for the 'ffenc' file encoding segment.
+let g:airline#parts#ffenc#skip_expected_string='utf-8[unix]'
+
+" Enabling powerline fonts depends on setting the "Use built-in Powerline
+" glyphs" setting in iTerm2.
+let g:airline_powerline_fonts = 1
+
+" Disable completion errors and warnings, because everything has errors all the
+" time, and statusline is not the place to care about it.
+let g:airline#extensions#ycm#enabled = 0
+let g:airline#extensions#coc#enabled = 0
