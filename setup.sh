@@ -202,6 +202,7 @@ if os::is "Darwin" ; then
             jq \
             kubectx \
             kubernetes-cli \
+            node \
             nvim \
             rsync \
             watch
@@ -265,5 +266,6 @@ if command -v nvim 2>&1 ; then
         -c "CocInstall coc-go " \
         -c "CocInstall coc-clangd" \
         -c "CocInstall coc-rust-analyzer" \
+        -c GoInstallBinaries \
         -c only -c quit
 fi
