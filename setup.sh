@@ -180,7 +180,7 @@ if os::is 'Linux' ; then
             global \
             htop \
             jq \
-            nvim \
+            neovim \
             rsync \
             vim \
             watch
