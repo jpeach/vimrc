@@ -181,6 +181,7 @@ if os::is 'Linux' ; then
             htop \
             jq \
             neovim \
+            nodejs \
             rsync \
             vim \
             watch
