@@ -256,16 +256,23 @@ git::config init.defaultBranch main
 git::config transfer.fsckObjects true
 git::config fetch.fsckObjects true
 
+# Remember you can only have 10 "-c" commands at a time.
 if command -v nvim 2>&1 ; then
     nvim \
         -c PlugUpdate \
         -c PlugInstall \
         -c PlugUpgrade \
+        -c only -c quit
+
+    nvim \
         -c "CocInstall coc-json" \
         -c "CocInstall coc-tsserver" \
         -c "CocInstall coc-go " \
         -c "CocInstall coc-clangd" \
         -c "CocInstall coc-rust-analyzer" \
+        -c only -c quit
+
+    nvim \
         -c GoInstallBinaries \
         -c only -c quit
 fi
