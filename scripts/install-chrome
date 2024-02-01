@@ -1,0 +1,16 @@
+#! /usr/bin/env bash
+
+set -o errexit
+set -o nounset
+set -o pipefail
+
+. /etc/os-release || true
+
+case "$ID" in
+ubuntu)
+    url=https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+    debfile=/tmp/$(basename "$url" .deb)-$$.deb
+    curl --location --progress-bar -o $debfile "$url"
+    sudo apt install -y $debfile
+;;
+esac

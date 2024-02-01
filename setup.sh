@@ -226,18 +226,6 @@ if os::is "Darwin" ; then
     fi
 fi
 
-case "$ID" in
-ubuntu)
-    for url in \
-        https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-    do
-        debfile=/tmp/$(basename "$url" .deb)-$$.deb
-        curl --location --progress-bar -o $debfile "$url"
-        sudo apt install -y $debfile
-    done
-    ;;
-esac
-
 # Update vim-plug.
 curl --silent --fail --location --create-dirs \
     --output ~/.vim/autoload/plug.vim \
