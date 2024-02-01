@@ -14,8 +14,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-readonly HERE=$(cd $(dirname $0) && pwd)
-
 . /etc/os-release || true
 
 error()
@@ -90,7 +88,6 @@ EOF
 bash::profile() {
     cat > ~/.bash_profile <<EOF
 source ~/.bashrc
-source $HERE/completions.sh
 EOF
 }
 
@@ -140,6 +137,10 @@ VIMRC=${VIMRC##$HOMEDIR/}
 
     # Make this an absolute symlink.
     linkit $(pwd)/$VIMRC/tmux-cc ~/bin/tmux-cc
+
+    # Absolute symlink to the Bash completion detection so we can source
+    # it from bashrc.
+    linkit $(pwd)/$VIMRC/completions.sh ~/bin/completions.sh
 
     # Don't update Vagrantfile if it is a regular file, since I
     # probably should verify that I don't want it and/or clean up

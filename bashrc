@@ -72,3 +72,11 @@ fi
 # Fedora hooks this into PackageKit, which is generally a bit annoying.
 # https://unix.stackexchange.com/questions/544330/handle-command-not-found-without-packagekit
 unset -f command_not_found_handle
+
+if [ -r "${HOME}/bin/completions.sh" ] ; then
+    source "${HOME}/bin/completions.sh"
+fi
+
+# I guess that the nix installer pukes this in, and it's pretty harmless.
+[[ -e ~/.nix-profile/etc/profile.d/nix.sh ]] && source ~/.nix-profile/etc/profile.d/nix.sh
+[[ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]] && source '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'

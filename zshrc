@@ -60,3 +60,5 @@ export KUBECTX_IGNORE_FZF=Y
 #    export CLOUDSDK_PYTHON="/usr/local/opt/python@3.8/libexec/bin/python"
 #    source "/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.bash.inc"
 #fi
+[[ -e ~/.nix-profile/etc/profile.d/nix.sh ]] && source ~/.nix-profile/etc/profile.d/nix.sh
+[[ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]] && source '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
