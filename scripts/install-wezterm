@@ -1,0 +1,46 @@
+#! /usr/bin/env bash
+
+set -o errexit
+
+readonly TEMPDIR=$(mktemp -d)
+
+# https://wezfurlong.org/wezterm/install/linux.html
+install::ubuntu() {
+    curl --fail --silent --show-error --location https://apt.fury.io/wez/gpg.key | \
+        sudo gpg --yes --dearmor -o /usr/share/keyrings/wezterm-fury.gpg
+
+    echo 'deb [signed-by=/usr/share/keyrings/wezterm-fury.gpg] https://apt.fury.io/wez/ * *' | \
+        sudo tee /etc/apt/sources.list.d/wezterm.list
+
+    sudo apt update
+    sudo apt install wezterm
+}
+
+install::config() {
+    cat > ~/.wezterm.lua <<EOF
+local wezterm = require 'wezterm'
+local config = wezterm.config_builder()
+
+config.color_scheme = 'Harper (Gogh)'
+
+config.font = wezterm.font 'JetBrains Mono'
+config.font_size = 10
+
+-- Use the defaults as a base
+config.hyperlink_rules = wezterm.default_hyperlink_rules()
+
+scrollback_lines = 100000
+enable_scroll_bar = true
+
+return config
+EOF
+}
+
+. /etc/os-release
+case $ID in
+ubuntu) install::ubuntu ;;
+*) echo "$0: no support for $ID";;
+esac
+
+install::config
+
