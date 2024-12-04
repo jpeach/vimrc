@@ -29,7 +29,7 @@ shopt -s histappend
 export TERM=xterm-256color
 export GOPATH=$HOME/go
 
-export GIT_EDITOR=vim
+export GIT_EDITOR=nvim
 
 # Add rustup install directory if it exists.
 if [ -r "$HOME/.cargo/env" ]; then

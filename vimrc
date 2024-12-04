@@ -272,7 +272,7 @@ let g:go_highlight_methods = 1
 " Use golang-ci for metalinter.
 let g:go_metalinter_command = 'golangci-lint'
 
-let g:go_metalinter_autosave_enabled = ['vet', 'revive', 'errcheck']
+let g:go_metalinter_autosave_enabled = ['govet', 'revive', 'errcheck']
 
 " Run vet, lint, etc on save. This picks up a reasonable amount of issues.
 let g:go_metalinter_autosave = 1
@@ -308,3 +308,9 @@ let g:airline_powerline_fonts = 1
 " time, and statusline is not the place to care about it.
 let g:airline#extensions#ycm#enabled = 0
 let g:airline#extensions#coc#enabled = 0
+
+" Default nvim mouse support disables terminal copy/paste, which
+" is what I tend to use most.
+if has('nvim')
+    set mouse=
+endif
